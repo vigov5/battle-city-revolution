@@ -15,9 +15,8 @@ public class Sprite {
 	private int frameWidth;
 	private int frameHeight;
 	private int frameColNum;
-	private int frameRowNum;
-	private int currentFrame;
-	private int currentIndex;
+	protected int currentFrame;
+	protected int currentIndex;
 	protected int currentDirection;
 	protected int[] frameStrip;
 	protected int rectangleBoundX;
@@ -43,13 +42,14 @@ public class Sprite {
 					+ ", or frameWidth = " + frameWidth);
 		}
 		this.frameColNum =  fullImage.getWidth()/frameWidth;
-		this.frameRowNum = fullImage.getHeight()/frameHeight;
 		this.frameHeight = frameHeight;
 		this.frameWidth = frameWidth;
+		this.currentIndex = 0;
 		this.setFrame(0);
 	}
 
 	public void render(Graphics g) {
+		this.setFrame(this.currentFrame);
 		g.drawImage(this.currentImage, x, y, frameWidth, frameHeight, null);
 	}
 	
@@ -73,6 +73,7 @@ public class Sprite {
 	
 	protected void setCurrentDirection(int direct) {
 		currentDirection = direct;
+		
 	}
 	
 	protected int getCurrentDirection(){

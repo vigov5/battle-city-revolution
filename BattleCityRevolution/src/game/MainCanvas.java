@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -19,16 +20,15 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public static int animationClock = 0;
 	public static Tools t;
 	public static TileManager tm;
+	public static ArrayList<Explosion> explosionArray;
 
 	public MainCanvas() {
 		t = new Tools();
 		try {
 			tm = new TileManager("01.map");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
+			// new explosion array
+			explosionArray = new ArrayList<Explosion>(20);
+			explosionArray.clear();
 			playerTank = new Tank(t.getTankImage(), 32, 32);
 			playerTank.setPositionAndBound(0, 0);
 			Thread t = new Thread(this);
@@ -48,8 +48,16 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			if (animationClock == 2147483647) {
 				animationClock = 0;
 			}
-			
+			// Update tank state 
 			playerTank.update();
+			// Update explosion array
+			if (!explosionArray.isEmpty()){
+				for (int i=0; i<explosionArray.size(); i++){
+					explosionArray.get(i).update();
+					if (explosionArray.get(i).isDestroyed()) explosionArray.remove(i); 
+				}
+			}
+			// Repaint
 			repaint();
 			try {
 				Thread.sleep(sleepTime);
@@ -65,8 +73,13 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		g.fillRect(0, 0, 800, 512);
 		tm.render(g);
 		playerTank.render(g);
+		if (!explosionArray.isEmpty()){
+			for (int i=0; i<explosionArray.size(); i++){
+				explosionArray.get(i).render(g);
+			}
+		}
 	}
-
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -83,5 +96,16 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public static void addExplosion(int x, int y) {
+		try {
+			Explosion tmp = new Explosion(MainCanvas.t.getExplosionImage(), 32, 32);
+			tmp.setPositionAndBound(x, y);
+			explosionArray.add(tmp);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

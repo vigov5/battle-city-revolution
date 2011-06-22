@@ -11,6 +11,7 @@ public class Tools {
 	public static BufferedImage tankImage = null;
 	public static BufferedImage bulletImage = null;
 	private static BufferedImage tileImage = null;
+	private static BufferedImage explosionImage = null;
 	
 	public BufferedImage getTankImage() throws IOException {
 		if (tankImage == null){
@@ -33,6 +34,13 @@ public class Tools {
 		return tileImage;
 	}
 	
+	public BufferedImage getExplosionImage() throws IOException {
+		if (explosionImage  == null){
+			explosionImage = ImageIO.read(new File("explosion1.png"));
+		}
+		return explosionImage;
+	}
+	
 	public boolean isCollision(Sprite a, Sprite b){
 		//System.out.println("a = " + a.getClass() + ", b = " + b.getClass());
 		//a.printData();
@@ -45,3 +53,7 @@ public class Tools {
 		return true;
 	}
 }
+
+
+
+

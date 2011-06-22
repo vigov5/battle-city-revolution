@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Tank extends Sprite {
 
@@ -17,19 +18,19 @@ public class Tank extends Sprite {
 	private boolean isRunning = false;
 	private int speedStep = 2;
 	private final int MAX_BULLET = 100;
-	private Bullet[] bulletArray = new Bullet[MAX_BULLET];
-	private int bulletArrayEnd = 0;
-	private int bulletArrayStart = 0;
-	private int totalBullet = 0;
+	private ArrayList<Bullet> bulletArray;
 	private int bulletType;
+	private long bulletDelayTime = 50;
+	private long lastBulletTime = 0;
 
 	public Tank(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
 		this.setBound(0, 0, frameWidth, frameHeight);
 		bulletType = Bullet.SMALL_BULLET;
-		for (int i = 0; i < MAX_BULLET; i++)
-			bulletArray[i] = null;
+		// create a null bullet array
+		bulletArray = new ArrayList<Bullet>(MAX_BULLET);
+		bulletArray.clear();
 	}
 
 	public void setRunning(boolean value) {
@@ -41,16 +42,16 @@ public class Tank extends Sprite {
 	}
 
 	public boolean isFiring() {
-		for (int i = bulletArrayStart; i < MAX_BULLET; i++)
-			if (bulletArray[i] != null)
+		for (int i = 0; i < bulletArray.size(); i++)
+			if (bulletArray.get(i) != null)
 				return true;
 		return false;
 	}
 
 	public void render(Graphics g) {
 		if (isFiring()) {
-			for (int i = bulletArrayEnd - 1; i >= 0; i--) {
-				bulletArray[i].render(g);
+			for (int i = bulletArray.size() - 1; i >= 0; i--) {
+				((Bullet) bulletArray.get(i)).render(g);
 			}
 		}
 		this.drawBound(g);
@@ -60,23 +61,22 @@ public class Tank extends Sprite {
 	public void move(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			setCurrentDirection(Sprite.UP);
-			setFrameStrip(upFrameStrip);
 			this.setRunning(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			this.setCurrentDirection(Sprite.DOWN);
-			setFrameStrip(downFrameStrip);
 			this.setRunning(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			this.setCurrentDirection(Sprite.LEFT);
-			setFrameStrip(leftFrameStrip);
 			this.setRunning(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			this.setCurrentDirection(Sprite.RIGHT);
-			setFrameStrip(rightFrameStrip);
 			this.setRunning(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			try {
-				this.addBullet(this, bulletType, this.getX(), this.getY());
+				if (System.currentTimeMillis() - lastBulletTime > bulletDelayTime) {
+					this.addBullet(this, bulletType, this.getX(), this.getY());
+				}
+				lastBulletTime = System.currentTimeMillis();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -87,13 +87,12 @@ public class Tank extends Sprite {
 	void addBullet(Tank parent, int type, int x, int y) throws IOException {
 		/*
 		 * 
-		 * Use circle queue to manager bullet array, insert at bulletArrayEnd,
-		 * remove at bulletArrayStart
+		 * Use ArrayList to manager bullet insert at bulletArrayEnd, remove at
+		 * bulletArrayStart
 		 */
-		Bullet tmp = new Bullet(MainCanvas.t.getBulletImage(), 32, 32, parent, bulletArrayEnd);
+		Bullet tmp = new Bullet(MainCanvas.t.getBulletImage(), 32, 32, parent);
 		tmp.setType(type);
-		bulletArray[bulletArrayEnd] = tmp;
-		totalBullet++;
+		bulletArray.add(tmp);
 	}
 
 	public void update() {
@@ -108,16 +107,17 @@ public class Tank extends Sprite {
 				this.setPositionAndBound(this.getX(), this.getY() + speedStep);
 				break;
 			case Sprite.LEFT:
-				this.setPositionAndBound(this.getX() - speedStep, this.getY());				
+				this.setPositionAndBound(this.getX() - speedStep, this.getY());
 				break;
 			case Sprite.RIGHT:
 				this.setPositionAndBound(this.getX() + speedStep, this.getY());
 				break;
 			}
 		}
-		for (int i=0; i<MainCanvas.tm.getTotalBrick(); i++) {
-			if (MainCanvas.tm.getBrickArray()[i]!= null &&
-					MainCanvas.t.isCollision(this, MainCanvas.tm.getBrickArray()[i])) {
+		for (int i = 0; i < MainCanvas.tm.getTotalBrick(); i++) {
+			if (MainCanvas.tm.getBrickArray()[i] != null
+					&& MainCanvas.t.isCollision(this, MainCanvas.tm
+							.getBrickArray()[i])) {
 				this.setPositionAndBound(lastX, lastY);
 				break;
 			}
@@ -125,15 +125,19 @@ public class Tank extends Sprite {
 		if (MainCanvas.animationClock % 5 == 0 && this.isRunning())
 			this.nextFrame();
 		if (isFiring()) {
-			for (int i = bulletArrayStart; i < totalBullet; i++)
-				if (bulletArray[i] != null) bulletArray[i].update();
+			for (int i = 0; i < bulletArray.size(); i++){
+					bulletArray.get(i).update();
+					if (bulletArray.get(i).isDestroyed()){
+						bulletArray.remove(i);
+					}
+			}
 		}
 	}
-	
-	public void setPositionAndBound(int x, int y){
+
+	public void setPositionAndBound(int x, int y) {
 		this.x = x;
 		this.y = y;
-		switch (this.getCurrentDirection()){
+		switch (this.getCurrentDirection()) {
 		case Sprite.DOWN:
 		case Sprite.UP:
 			this.setBound(4, 1, 24, 30);
@@ -144,16 +148,23 @@ public class Tank extends Sprite {
 			break;
 		}
 	}
-
-	public void cleanBullet(int index) {
-		System.out.println("End = " + this.bulletArrayEnd);
-		System.out.println("Index = " + index);
-		this.bulletArray[index] = null;
-		this.bulletArrayStart++;
-		this.totalBullet--;
-	}
 	
-	public int getBulletArrayStart(){
-		return this.bulletArrayStart;
+	protected void setCurrentDirection(int direct){
+		super.setCurrentDirection(direct);
+		switch (direct) {
+		case Sprite.UP:
+			this.setFrameStrip(upFrameStrip);
+			break;
+		case Sprite.DOWN:
+			this.setFrameStrip(downFrameStrip);
+			break;
+		case Sprite.LEFT:
+			this.setFrameStrip(leftFrameStrip);
+			break;
+		case Sprite.RIGHT:
+			this.setFrameStrip(rightFrameStrip);
+			break;
+		}
+		this.currentFrame = this.frameStrip[currentIndex];
 	}
 }
