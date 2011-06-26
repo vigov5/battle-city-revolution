@@ -1,7 +1,6 @@
 package game;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,9 +18,10 @@ public class Tank extends Sprite {
 	private int speedStep = 2;
 	private final int MAX_BULLET = 100;
 	private ArrayList<Bullet> bulletArray;
-	private int bulletType;
-	private long bulletDelayTime = 50;
-	private long lastBulletTime = 0;
+	protected int bulletType;
+	protected long bulletDelayTime = 50;
+	protected long lastBulletTime = 0;
+	protected boolean pathBlocked = false;
 
 	public Tank(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
@@ -33,7 +33,7 @@ public class Tank extends Sprite {
 		bulletArray.clear();
 	}
 
-	public void setRunning(boolean value) {
+	public synchronized void setRunning(boolean value) {
 		this.isRunning = value;
 	}
 
@@ -58,33 +58,7 @@ public class Tank extends Sprite {
 		super.render(g);
 	}
 
-	public void move(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			setCurrentDirection(Sprite.UP);
-			this.setRunning(true);
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			this.setCurrentDirection(Sprite.DOWN);
-			this.setRunning(true);
-		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			this.setCurrentDirection(Sprite.LEFT);
-			this.setRunning(true);
-		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			this.setCurrentDirection(Sprite.RIGHT);
-			this.setRunning(true);
-		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			try {
-				if (System.currentTimeMillis() - lastBulletTime > bulletDelayTime) {
-					this.addBullet(this, bulletType, this.getX(), this.getY());
-				}
-				lastBulletTime = System.currentTimeMillis();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-	}
-
-	void addBullet(Tank parent, int type, int x, int y) throws IOException {
+	void addBullet(Tank parent, int type) throws IOException {
 		/*
 		 * 
 		 * Use ArrayList to manager bullet insert at bulletArrayEnd, remove at
@@ -114,24 +88,39 @@ public class Tank extends Sprite {
 				break;
 			}
 		}
-		for (int i = 0; i < MainCanvas.tm.getTotalBrick(); i++) {
-			if (MainCanvas.tm.getBrickArray()[i] != null
-					&& MainCanvas.t.isCollision(this, MainCanvas.tm
-							.getBrickArray()[i])) {
-				this.setPositionAndBound(lastX, lastY);
-				break;
-			}
-		}
+
+		if (MainCanvas.tm.isCollisionWithBricks(this)
+				|| MainCanvas.t.isOutScreen(this)
+				|| isCollisonWithAnotherTank()) {
+			this.pathBlocked = true;
+			this.setPositionAndBound(lastX, lastY);
+		} else
+			this.pathBlocked = false;
+		
+		isCollisionWithBullets(this);
+
 		if (MainCanvas.animationClock % 5 == 0 && this.isRunning())
 			this.nextFrame();
 		if (isFiring()) {
-			for (int i = 0; i < bulletArray.size(); i++){
-					bulletArray.get(i).update();
-					if (bulletArray.get(i).isDestroyed()){
-						bulletArray.remove(i);
-					}
+			for (int i = 0; i < bulletArray.size(); i++) {
+				bulletArray.get(i).update();
+				if (bulletArray.get(i).isDestroyed()) {
+					bulletArray.remove(i);
+				}
 			}
 		}
+	}
+
+	public boolean isCollisonWithAnotherTank() {
+		for (int i = 0; i < MainCanvas.tankArray.size(); i++) {
+			if (MainCanvas.tankArray.indexOf(this) != i
+					&& MainCanvas.t.isCollision(this, MainCanvas.tankArray
+							.get(i))) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void setPositionAndBound(int x, int y) {
@@ -148,8 +137,8 @@ public class Tank extends Sprite {
 			break;
 		}
 	}
-	
-	protected void setCurrentDirection(int direct){
+
+	protected void setCurrentDirection(int direct) {
 		super.setCurrentDirection(direct);
 		switch (direct) {
 		case Sprite.UP:
@@ -166,5 +155,23 @@ public class Tank extends Sprite {
 			break;
 		}
 		this.currentFrame = this.frameStrip[currentIndex];
+	}
+
+	public boolean isCollisionWithBullets(Sprite a) {
+		int i = 0;
+		int j = 0;
+		for (i = 0; i < MainCanvas.tankArray.size(); i++) {
+			if (i != MainCanvas.tankArray.indexOf(a)) {
+				Tank tmp = MainCanvas.tankArray.get(i);
+				for (j = 0; j < tmp.bulletArray.size(); j++) {
+					Bullet bullet = tmp.bulletArray.get(j);
+					if (a instanceof PlayerTank && bullet.getParent()instanceof AITank) {
+						System.out.println("Hits !!!");
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

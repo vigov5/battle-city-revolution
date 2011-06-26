@@ -16,23 +16,41 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	 */
 	private static final long serialVersionUID = 1270488992849705712L;
 	private long sleepTime = 20;
-	private Tank playerTank;
+	private PlayerTank playerTank;
+	private AITank AITank;
 	public static int animationClock = 0;
 	public static Tools t;
 	public static TileManager tm;
 	public static ArrayList<Explosion> explosionArray;
+	public static ArrayList<Tank> tankArray;
+	public final int SCREEN_WIDTH = 800;
+	public final int SCREEN_HEIGHT = 512;
 
 	public MainCanvas() {
-		t = new Tools();
+		this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		t = new Tools(this);
 		try {
 			tm = new TileManager("01.map");
-			// new explosion array
+			
+			// init tank and explosion array
 			explosionArray = new ArrayList<Explosion>(20);
 			explosionArray.clear();
-			playerTank = new Tank(t.getTankImage(), 32, 32);
+			tankArray = new ArrayList<Tank>(20);
+			tankArray.clear();
+			
+			// create tanks and add to array 
+			playerTank = new PlayerTank(t.getTankOneImage(), 32, 32);
 			playerTank.setPositionAndBound(0, 0);
+			tankArray.add(playerTank);
+			AITank = new AITank(t.getTankTwoImage(), 32, 32);
+			AITank.setPositionAndBound(128, 0);
+			tankArray.add(AITank);
+			
+			
 			Thread t = new Thread(this);
 			t.start();
+			
+			
 			this.setFocusable(true);
 			this.addKeyListener(this);
 		} catch (IOException e) {
@@ -50,6 +68,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			}
 			// Update tank state 
 			playerTank.update();
+			AITank.think();
+			AITank.update();
 			// Update explosion array
 			if (!explosionArray.isEmpty()){
 				for (int i=0; i<explosionArray.size(); i++){
@@ -70,9 +90,10 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 800, 512);
+		g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		tm.render(g);
 		playerTank.render(g);
+		AITank.render(g);
 		if (!explosionArray.isEmpty()){
 			for (int i=0; i<explosionArray.size(); i++){
 				explosionArray.get(i).render(g);
@@ -108,4 +129,5 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			e.printStackTrace();
 		}
 	}
+	
 }

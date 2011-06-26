@@ -13,8 +13,7 @@ public class Bullet extends Sprite {
 	private Tank parent;
 	private boolean destroyed = false;
 
-	public Bullet(BufferedImage image, int frameHeight, int frameWidth,
-			Tank parent) {
+	public Bullet(BufferedImage image, int frameHeight, int frameWidth, Tank parent) {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
 		this.setCurrentDirection(parent.getCurrentDirection());
@@ -27,6 +26,11 @@ public class Bullet extends Sprite {
 	public void setParent(Tank t) {
 		this.parent = t;
 	}
+	
+	public Tank getParent() {
+		return this.parent;
+	}
+	
 
 	public void render(Graphics g) {
 		if (!this.destroyed) {

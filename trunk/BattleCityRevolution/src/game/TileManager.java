@@ -16,7 +16,7 @@ public class TileManager {
 	private final int MAP_WIDTH = 25;
 	private final int MAP_HEIGHT = 17;
 
-	private static Brick[] brickArray = new Brick[100];
+	private static Brick[] brickArray = new Brick[200];
 	private int totalBrick = 0;
 	private BufferedImage background;
 
@@ -73,5 +73,16 @@ public class TileManager {
 	public void cleanBrick(int index) {
 		// TODO Auto-generated method stub
 		this.brickArray[index] = null;
+	}
+	
+	public boolean isCollisionWithBricks(Sprite a) {
+		for (int i = 0; i < MainCanvas.tm.getTotalBrick(); i++) {
+			if (MainCanvas.tm.getBrickArray()[i] != null
+					&& MainCanvas.t.isCollision(a, MainCanvas.tm
+							.getBrickArray()[i])) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
