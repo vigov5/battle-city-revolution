@@ -65,13 +65,13 @@ public class Sprite {
 		return this.currentFrame;
 	}
 	
-	public void setPositionAndBound(int x, int y){
+	public synchronized void setPositionAndBound(int x, int y){
 		this.x = x;
 		this.y = y;
 		this.setBound(0, 0, frameWidth, frameHeight);
 	}
 	
-	protected void setCurrentDirection(int direct) {
+	protected synchronized void setCurrentDirection(int direct) {
 		currentDirection = direct;
 		
 	}
@@ -84,7 +84,7 @@ public class Sprite {
 		this.frameStrip = frames;
 	}
 	
-	protected void setBound(int dx, int dy, int width, int height){
+	protected synchronized void setBound(int dx, int dy, int width, int height){
 		/*
 		 *dx, dy = distance from x, y
 		 */

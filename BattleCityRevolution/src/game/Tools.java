@@ -8,16 +8,22 @@ import javax.imageio.ImageIO;
 
 public class Tools {
 	
-	public static BufferedImage tankImage = null;
+	public static BufferedImage tankOneImage = null;
 	public static BufferedImage bulletImage = null;
 	private static BufferedImage tileImage = null;
 	private static BufferedImage explosionImage = null;
+	private static BufferedImage tankTwoImage;
+	private MainCanvas mc;
 	
-	public BufferedImage getTankImage() throws IOException {
-		if (tankImage == null){
-			tankImage = ImageIO.read(new File("tank1.png"));
+	public Tools(MainCanvas mc){
+		this.mc = mc;
+	}
+	
+	public BufferedImage getTankOneImage() throws IOException {
+		if (tankOneImage == null){
+			tankOneImage = ImageIO.read(new File("tank1.png"));
 		}
-		return tankImage;
+		return tankOneImage;
 	}
 
 	public BufferedImage getBulletImage() throws IOException {
@@ -32,6 +38,13 @@ public class Tools {
 			tileImage = ImageIO.read(new File("tileset1.png"));
 		}
 		return tileImage;
+	}
+	
+	public BufferedImage getTankTwoImage() throws IOException {
+		if (tankTwoImage == null){
+			tankTwoImage = ImageIO.read(new File("tank2.png"));
+		}
+		return tankTwoImage;
 	}
 	
 	public BufferedImage getExplosionImage() throws IOException {
@@ -51,6 +64,16 @@ public class Tools {
 			a.getBoundY() > b.getBoundY() + b.getBoundHeight() 
 			) return false;		
 		return true;
+	}
+	
+	public boolean isOutScreen(Sprite a){
+		if (a.getBoundX() < 0 ||
+			a.getBoundY() < 0 ||
+			a.getBoundY()+ a.getBoundHeight() > mc.getHeight() ||
+		    a.getBoundX() + a.getBoundWidth() > mc.getWidth()) {
+		return true;
+		}
+		return false; 
 	}
 }
 
