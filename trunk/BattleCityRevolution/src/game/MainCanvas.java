@@ -17,7 +17,6 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	private static final long serialVersionUID = 1270488992849705712L;
 	private long sleepTime = 20;
 	private PlayerTank playerTank;
-	private AITank AITank;
 	public static int animationClock = 0;
 	public static Tools t;
 	public static TileManager tm;
@@ -70,9 +69,14 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			}
 			// Update tank state 
 			for (int i=0; i<tankArray.size(); i++){
-				tankArray.get(i).update();
 				if (tankArray.get(i) instanceof AITank)
 					((game.AITank) tankArray.get(i)).think();
+				tankArray.get(i).update();
+				if (tankArray.get(i) instanceof AITank && tankArray.get(i).isDestroyed){
+					Tank tmp = tankArray.get(i);
+					tankArray.remove(tmp);
+					tmp = null;
+				}
 			}
 			// Update explosion array
 			if (!explosionArray.isEmpty()){
@@ -115,7 +119,22 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		playerTank.setRunning(false);
+		switch (e.getKeyCode()){
+		case KeyEvent.VK_UP:
+			if (playerTank.getCurrentDirection() == Sprite.UP) playerTank.setRunning(false);
+			break;
+		case KeyEvent.VK_DOWN:
+			if (playerTank.getCurrentDirection() == Sprite.DOWN) playerTank.setRunning(false);
+			break;
+		case KeyEvent.VK_LEFT:
+			if (playerTank.getCurrentDirection() == Sprite.LEFT) playerTank.setRunning(false);
+			break;
+		case KeyEvent.VK_RIGHT:
+			if (playerTank.getCurrentDirection() == Sprite.RIGHT) playerTank.setRunning(false);
+			break;
+		case KeyEvent.VK_SPACE:
+			playerTank.fire();
+		}
 	}
 
 	@Override

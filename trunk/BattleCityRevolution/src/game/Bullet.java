@@ -75,15 +75,16 @@ public class Bullet extends Sprite {
 			this.setPositionAndBound(this.x + speed, this.y);
 			break;
 		}
+		boolean hit = false;
 		for (int i = 0; i < MainCanvas.tm.getTotalBrick(); i++) {
 			if (MainCanvas.tm.getBrickArray()[i] != null
 					&& MainCanvas.t.isCollision(this, MainCanvas.tm
 							.getBrickArray()[i])) {
-				makeExplosion();
+				hit = true;
 				MainCanvas.tm.getBrickArray()[i].update();
-				break;
 			}
 		}
+		if (hit) this.makeExplosion();
 	}
 
 	public void makeExplosion() {

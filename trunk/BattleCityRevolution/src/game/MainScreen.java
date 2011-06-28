@@ -16,6 +16,7 @@ public class MainScreen {
 		myFrame.setSize(800, 512);
 		canvas = new MainCanvas();
 		myFrame.add(canvas);
+		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		myFrame.setVisible(true);	
 	}
 
