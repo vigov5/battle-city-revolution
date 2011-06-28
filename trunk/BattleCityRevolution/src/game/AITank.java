@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class AITank extends Tank {
 
-	Random rnd;
+	private Random rnd;
 	
 	private boolean keepDoing = false;
 	
@@ -17,10 +17,14 @@ public class AITank extends Tank {
 		 rnd = new Random(new Date().getTime());
 		 this.setCurrentDirection(Sprite.DOWN);
 		 this.bulletDelayTime = 300;
+		 this.setTotalHealth(100);
+		 this.currentHealth = this.totalHealth;
 	}
 	
 	public void think(){
-		int i = rnd.nextInt(100);
+		rnd = new Random(new Date().getTime());
+		int i = 0;
+		for (int j = 0; j<10; j++) i = rnd.nextInt(100);
 		
 		if (i % 37 == 0){
 			// change direction

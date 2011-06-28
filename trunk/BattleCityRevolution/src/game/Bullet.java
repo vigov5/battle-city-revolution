@@ -12,6 +12,7 @@ public class Bullet extends Sprite {
 	private int currentType;
 	private Tank parent;
 	private boolean destroyed = false;
+	private int damage;
 
 	public Bullet(BufferedImage image, int frameHeight, int frameWidth, Tank parent) {
 		super(image, frameHeight, frameWidth);
@@ -21,6 +22,18 @@ public class Bullet extends Sprite {
 		this.setPositionAndBound(parent.getX(), parent.getY());
 		this.currentType = SMALL_BULLET;
 		this.setFrame(4);
+	}
+	
+	public int getDamage(){
+		switch (currentType){
+		case SMALL_BULLET:
+			return 10;
+		case BIG_BULLET:
+			return 20;
+		case MISSILE_BULLET:
+			return 30;
+		}
+		return 0;
 	}
 
 	public void setParent(Tank t) {
@@ -66,12 +79,16 @@ public class Bullet extends Sprite {
 			if (MainCanvas.tm.getBrickArray()[i] != null
 					&& MainCanvas.t.isCollision(this, MainCanvas.tm
 							.getBrickArray()[i])) {
-				MainCanvas.addExplosion(this.getX(), this.getY());
-				this.destroyed = true;
+				makeExplosion();
 				MainCanvas.tm.getBrickArray()[i].update();
 				break;
 			}
 		}
+	}
+
+	public void makeExplosion() {
+		MainCanvas.addExplosion(this.getX(), this.getY());
+		this.destroyed = true;
 	}
 
 	public void setPositionAndBound(int x, int y) {

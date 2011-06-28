@@ -42,9 +42,11 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			playerTank = new PlayerTank(t.getTankOneImage(), 32, 32);
 			playerTank.setPositionAndBound(0, 0);
 			tankArray.add(playerTank);
-			AITank = new AITank(t.getTankTwoImage(), 32, 32);
-			AITank.setPositionAndBound(128, 0);
-			tankArray.add(AITank);
+			for (int i=0; i<3; i++){
+				AITank tmp = new AITank(t.getTankTwoImage(), 32, 32);
+				tmp.setPositionAndBound(64*(i+1), 0);
+				tankArray.add(tmp);
+			}
 			
 			
 			Thread t = new Thread(this);
@@ -67,9 +69,11 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 				animationClock = 0;
 			}
 			// Update tank state 
-			playerTank.update();
-			AITank.think();
-			AITank.update();
+			for (int i=0; i<tankArray.size(); i++){
+				tankArray.get(i).update();
+				if (tankArray.get(i) instanceof AITank)
+					((game.AITank) tankArray.get(i)).think();
+			}
 			// Update explosion array
 			if (!explosionArray.isEmpty()){
 				for (int i=0; i<explosionArray.size(); i++){
@@ -92,8 +96,9 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		tm.render(g);
-		playerTank.render(g);
-		AITank.render(g);
+		for (int i=0; i<tankArray.size(); i++){
+			tankArray.get(i).render(g);
+		}
 		if (!explosionArray.isEmpty()){
 			for (int i=0; i<explosionArray.size(); i++){
 				explosionArray.get(i).render(g);
