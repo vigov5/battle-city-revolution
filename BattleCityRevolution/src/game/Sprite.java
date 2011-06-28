@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -12,8 +13,8 @@ public class Sprite {
 	private BufferedImage fullImage;
 	protected int x = 0;
 	protected int y = 0;
-	private int frameWidth;
-	private int frameHeight;
+	protected int frameWidth;
+	protected int frameHeight;
 	private int frameColNum;
 	protected int currentFrame;
 	protected int currentIndex;
@@ -132,6 +133,7 @@ public class Sprite {
 	}
 	
 	public void drawBound(Graphics g){
+		g.setColor(Color.BLACK);
 		g.drawRect(this.getBoundX(), this.getBoundY(), this.getBoundWidth(), this.getBoundHeight());
 	}
 }

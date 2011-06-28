@@ -1,3 +1,4 @@
+
 package game;
 
 import java.awt.Graphics;
@@ -11,6 +12,8 @@ public class PlayerTank extends Tank {
 	public PlayerTank(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
+		this.setTotalHealth(100);
+		this.currentHealth = this.totalHealth;
 	}
 
 	public void move(KeyEvent e) {

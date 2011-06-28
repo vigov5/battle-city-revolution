@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -7,12 +8,12 @@ import java.util.ArrayList;
 
 public class Tank extends Sprite {
 
-	private int totalHealth;
 	private int[] upFrameStrip = { 0, 1, 2, 3, 4, 5, 6 };
 	private int[] downFrameStrip = { 7, 8, 9, 10, 11, 12, 13 };
 	private int[] leftFrameStrip = { 14, 15, 16, 17, 18, 19, 20 };
 	private int[] rightFrameStrip = { 21, 22, 23, 24, 25, 26, 27 };
-	private int currentHealth;
+	protected int totalHealth;
+	protected int currentHealth;
 	private boolean isDestroyed;
 	private boolean isRunning = false;
 	private int speedStep = 2;
@@ -22,6 +23,7 @@ public class Tank extends Sprite {
 	protected long bulletDelayTime = 50;
 	protected long lastBulletTime = 0;
 	protected boolean pathBlocked = false;
+	protected int receivedDamage = 0;
 
 	public Tank(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
@@ -54,8 +56,29 @@ public class Tank extends Sprite {
 				((Bullet) bulletArray.get(i)).render(g);
 			}
 		}
+		this.drawHealthBar(g);
 		this.drawBound(g);
 		super.render(g);
+	}
+	
+	private void drawHealthBar(Graphics g) {
+		// TODO Auto-generated method stub
+		 /*
+		  * health bar width = frameWidth
+		  * health bar height = 4
+		  */
+		// draw background
+		g.setColor(Color.BLACK);
+		g.fillRect(this.getX(), this.getBoundY() - 10, this.frameWidth, 4);
+		g.setColor(Color.WHITE);
+		g.drawRect(this.getX(), this.getBoundY() - 10, this.frameWidth, 4);
+		// draw current health
+		g.setColor(Color.GREEN);
+		g.fillRect(this.getX(), this.getBoundY() - 10, this.currentHealth/this.totalHealth*this.frameWidth, 4);
+	}
+
+	public void setTotalHealth(int health){
+		this.totalHealth = health;
 	}
 
 	void addBullet(Tank parent, int type) throws IOException {
@@ -105,10 +128,18 @@ public class Tank extends Sprite {
 			for (int i = 0; i < bulletArray.size(); i++) {
 				bulletArray.get(i).update();
 				if (bulletArray.get(i).isDestroyed()) {
+					//Bullet tmp = bulletArray.get(i); 
 					bulletArray.remove(i);
+					//tmp = null;
 				}
 			}
 		}
+		
+		if (receivedDamage != 0){
+			this.currentHealth -= receivedDamage;
+		}
+		
+		if (this.currentHealth <= 0) this.isDestroyed = true;
 	}
 
 	public boolean isCollisonWithAnotherTank() {
@@ -162,12 +193,31 @@ public class Tank extends Sprite {
 		int j = 0;
 		for (i = 0; i < MainCanvas.tankArray.size(); i++) {
 			if (i != MainCanvas.tankArray.indexOf(a)) {
+				//System.out.println("i = " + i + ", This = " + MainCanvas.tankArray.indexOf(a));
 				Tank tmp = MainCanvas.tankArray.get(i);
 				for (j = 0; j < tmp.bulletArray.size(); j++) {
 					Bullet bullet = tmp.bulletArray.get(j);
-					if (a instanceof PlayerTank && bullet.getParent()instanceof AITank) {
-						System.out.println("Hits !!!");
+					if (a instanceof PlayerTank && bullet.getParent() instanceof AITank 
+							&& MainCanvas.t.isCollision(a, bullet)) {
+							bullet.makeExplosion();
+							this.receivedDamage += bullet.getDamage();
+							System.out.println("PlayerTank hited !!!");
 						return true;
+					}
+					
+					if (a instanceof AITank && bullet.getParent() instanceof PlayerTank 
+							&& MainCanvas.t.isCollision(a, bullet)) {
+							bullet.makeExplosion();
+							this.receivedDamage += bullet.getDamage();
+							System.out.println("AITank hited !!!");
+						return true;
+					}
+					
+					if (a instanceof AITank && bullet.getParent() instanceof AITank
+							&& MainCanvas.t.isCollision(a, bullet)){
+						System.out.println("AITank hited each other !!!");
+						bullet.makeExplosion();
+						return false;
 					}
 				}
 			}
