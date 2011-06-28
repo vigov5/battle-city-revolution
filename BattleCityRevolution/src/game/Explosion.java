@@ -3,8 +3,6 @@ package game;
 import java.awt.image.BufferedImage;
 
 public class Explosion extends Sprite {
-	
-	private boolean destroyed;
 
 	public Explosion(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
@@ -15,11 +13,7 @@ public class Explosion extends Sprite {
 	
 	public void update(){
 		if (this.currentFrame == this.frameStrip.length - 1){
-			this.destroyed = true;
+			this.setDestroyed(true);
 		} else if (MainCanvas.animationClock % 5 == 0) this.nextFrame();
-	}
-	
-	public boolean isDestroyed(){
-		return this.destroyed;
 	}
 }

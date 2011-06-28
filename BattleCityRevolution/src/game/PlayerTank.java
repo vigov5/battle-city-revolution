@@ -30,15 +30,7 @@ public class PlayerTank extends Tank {
 			this.setCurrentDirection(Sprite.RIGHT);
 			this.setRunning(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			try {
-				if (System.currentTimeMillis() - lastBulletTime > bulletDelayTime) {
-					this.addBullet(this, bulletType);
-				}
-				lastBulletTime = System.currentTimeMillis();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
 		}
 	}
 }

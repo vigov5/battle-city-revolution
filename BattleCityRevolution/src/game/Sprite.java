@@ -24,6 +24,7 @@ public class Sprite {
 	protected int rectangleBoundY;
 	protected int rectangleBoundHeight;
 	protected int rectangleBoundWidth;
+	protected boolean isDestroyed = false;
 	
 	public void setFrame(int frameNumber) {
 		int offsetX = frameNumber%frameColNum;
@@ -135,5 +136,12 @@ public class Sprite {
 	public void drawBound(Graphics g){
 		g.setColor(Color.BLACK);
 		g.drawRect(this.getBoundX(), this.getBoundY(), this.getBoundWidth(), this.getBoundHeight());
+	}
+	
+	public void setDestroyed(boolean value){
+		this.isDestroyed = value;
+	}
+	public boolean isDestroyed(){
+		return this.isDestroyed;
 	}
 }
