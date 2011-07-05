@@ -44,7 +44,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			tm = new TileManager("01.map");
 			
 			testItem = new Item(MainCanvas.t.getItemImage(), 32, 32);
-			testItem.setType(testItem.THUNDER_BOOST);
+			testItem.setType(testItem.CLOCK);
 			testItem.setPositionAndBound(100, 100);
 			
 			// init tank and explosion array
