@@ -1,12 +1,10 @@
 package game;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Brick extends Sprite {
 
 	private static int[] frameStrip = { 0, 1, 2, 3 };
-	private boolean isDestroyed = false;
 	private int index;
 
 	public Brick(BufferedImage image, int frameHeight, int frameWidth, int index) {
@@ -29,8 +27,10 @@ public class Brick extends Sprite {
 		if (this.getCurrentFrame() != frameStrip.length - 1) {
 			this.nextFrame();
 		} else {
-			isDestroyed = true;
+			this.setDestroyed(true);
 			MainCanvas.tm.cleanBrick(this.index);
 		}
 	}
+	
+	
 }

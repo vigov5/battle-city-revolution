@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 
 public class MainScreen {
@@ -10,12 +12,13 @@ public class MainScreen {
 	public MainScreen() {
 		myFrame = new JFrame("Battle City Revolution");
 		/*Size
-		 * Height = 16*32 = 512
-		 * Width = 25*32 = 1312
+		 * Height = 17*32 = 544
+		 * Width = 25*32 = 800
 		 */
-		myFrame.setSize(800, 512);
+		myFrame.setLayout(new BorderLayout());
+		myFrame.setSize(800, 598);
 		canvas = new MainCanvas();
-		myFrame.add(canvas);
+		myFrame.add(canvas, BorderLayout.CENTER);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		myFrame.setVisible(true);	
 	}

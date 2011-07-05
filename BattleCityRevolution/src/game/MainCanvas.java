@@ -23,13 +23,28 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public static ArrayList<Explosion> explosionArray;
 	public static ArrayList<Tank> tankArray;
 	public final int SCREEN_WIDTH = 800;
-	public final int SCREEN_HEIGHT = 512;
+	public final int SCREEN_HEIGHT = 544;
+	private boolean isRunning;
+	private static boolean gameOver;
+	private Item testItem;
+
+	public static boolean isGameOver() {
+		return gameOver;
+	}
+
+	public static void setGameOver(boolean gameOver) {
+		MainCanvas.gameOver = gameOver;
+	}
 
 	public MainCanvas() {
 		this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		t = new Tools(this);
 		try {
 			tm = new TileManager("01.map");
+			
+			testItem = new Item(MainCanvas.t.getItemImage(), 32, 32);
+			testItem.setType(testItem.THUNDER_BOOST);
+			testItem.setPositionAndBound(100, 100);
 			
 			// init tank and explosion array
 			explosionArray = new ArrayList<Explosion>(20);
@@ -47,7 +62,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 				tankArray.add(tmp);
 			}
 			
-			
+			this.setRunning(false);
 			Thread t = new Thread(this);
 			t.start();
 			
@@ -67,10 +82,16 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			if (animationClock == 2147483647) {
 				animationClock = 0;
 			}
-			// Update tank state 
+			
+			// Update tank state
 			for (int i=0; i<tankArray.size(); i++){
 				if (tankArray.get(i) instanceof AITank)
 					((game.AITank) tankArray.get(i)).think();
+				if (MainCanvas.t.isCollision(tankArray.get(i), testItem)){
+					testItem.applyEffect(tankArray.get(i));
+					testItem.applyEffect();
+					testItem.setDestroyed(true);
+				}
 				tankArray.get(i).update();
 				if (tankArray.get(i) instanceof AITank && tankArray.get(i).isDestroyed){
 					Tank tmp = tankArray.get(i);
@@ -78,6 +99,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 					tmp = null;
 				}
 			}
+			
 			// Update explosion array
 			if (!explosionArray.isEmpty()){
 				for (int i=0; i<explosionArray.size(); i++){
@@ -85,6 +107,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 					if (explosionArray.get(i).isDestroyed()) explosionArray.remove(i); 
 				}
 			}
+			
 			// Repaint
 			repaint();
 			try {
@@ -100,6 +123,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		tm.render(g);
+		if (!testItem.isDestroyed()) testItem.render(g);
 		for (int i=0; i<tankArray.size(); i++){
 			tankArray.get(i).render(g);
 		}
@@ -113,28 +137,13 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		playerTank.move(e);
+		playerTank.keyPressedReact(e);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		switch (e.getKeyCode()){
-		case KeyEvent.VK_UP:
-			if (playerTank.getCurrentDirection() == Sprite.UP) playerTank.setRunning(false);
-			break;
-		case KeyEvent.VK_DOWN:
-			if (playerTank.getCurrentDirection() == Sprite.DOWN) playerTank.setRunning(false);
-			break;
-		case KeyEvent.VK_LEFT:
-			if (playerTank.getCurrentDirection() == Sprite.LEFT) playerTank.setRunning(false);
-			break;
-		case KeyEvent.VK_RIGHT:
-			if (playerTank.getCurrentDirection() == Sprite.RIGHT) playerTank.setRunning(false);
-			break;
-		case KeyEvent.VK_SPACE:
-			playerTank.fire();
-		}
+		playerTank.keyReleasedReact(e);
 	}
 
 	@Override
@@ -153,5 +162,20 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			e.printStackTrace();
 		}
 	}
+
+	public void setRunning(boolean running) {
+		this.isRunning = running;
+	}
+
+	public boolean isRunning() {
+		return isRunning;
+	}
 	
+	public int getWidth(){
+		return SCREEN_WIDTH;
+	}
+	
+	public int getHeight(){
+		return SCREEN_HEIGHT;
+	}	
 }
