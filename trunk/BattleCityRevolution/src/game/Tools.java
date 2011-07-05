@@ -14,6 +14,7 @@ public class Tools {
 	private static BufferedImage explosionImage = null;
 	private static BufferedImage tankTwoImage;
 	private MainCanvas mc;
+	private BufferedImage itemImage;
 	
 	public Tools(MainCanvas mc){
 		this.mc = mc;
@@ -52,6 +53,13 @@ public class Tools {
 			explosionImage = ImageIO.read(new File("explosion1.png"));
 		}
 		return explosionImage;
+	}
+	
+	public BufferedImage getItemImage() throws IOException {
+		if (itemImage  == null){
+			itemImage = ImageIO.read(new File("items.png"));
+		}
+		return itemImage;
 	}
 	
 	public boolean isCollision(Sprite a, Sprite b){

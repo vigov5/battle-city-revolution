@@ -28,12 +28,12 @@ public class AITank extends Tank {
 		
 		if (i % 37 == 0){
 			// change direction
-			this.keepDoing = false;
+			this.setKeepDoing(false);
 			this.setCurrentDirection(rnd.nextInt(4));
 		}
 		
 		if (i < 50){
-			this.keepDoing = true;
+			this.setKeepDoing(true);
 			if (this.pathBlocked) {
 				this.fire();
 				this.setCurrentDirection(rnd.nextInt(4)); 
@@ -55,5 +55,13 @@ public class AITank extends Tank {
 			e1.printStackTrace();
 		}
 		this.setRunning(true);
+	}
+
+	public boolean isKeepDoing() {
+		return keepDoing;
+	}
+
+	public void setKeepDoing(boolean keepDoing) {
+		this.keepDoing = keepDoing;
 	}
 }

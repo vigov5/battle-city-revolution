@@ -3,8 +3,6 @@ package game;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
 /*
@@ -12,16 +10,22 @@ import java.io.IOException;
  * 
  * 
  */
+
 public class TileManager {
 	private final int MAP_WIDTH = 25;
 	private final int MAP_HEIGHT = 17;
 
 	private static Brick[] brickArray = new Brick[200];
 	private int totalBrick = 0;
+	private Sprite goldenBird;
 	private BufferedImage background;
 
 	public TileManager(String mapFile) throws IOException {
 		background = MainCanvas.t.getTileImage().getSubimage(64, 32, 32, 32);
+		
+		goldenBird = new Sprite(MainCanvas.t.getTileImage().getSubimage(0, 96, 64, 32), 32, 32);
+		goldenBird.setFrameStrip(new int[]{0, 1});
+		
 		for (int i = 0; i < 100; i++)
 			brickArray[i] = null;
 		readMap(mapFile);
@@ -40,6 +44,9 @@ public class TileManager {
 						brickArray[totalBrick].setPositionAndBound(j * 32,
 								i * 32);
 						totalBrick++;
+					}
+					if (c == 24){
+						goldenBird.setPositionAndBound(j*32, i*32);
 					}
 				}
 			}
@@ -60,6 +67,7 @@ public class TileManager {
 		for (int i = 0; i < totalBrick; i++)
 			if (brickArray[i] != null)
 				brickArray[i].render(g);
+		goldenBird.render(g);
 	}
 
 	public Brick[] getBrickArray() {
@@ -72,7 +80,7 @@ public class TileManager {
 
 	public void cleanBrick(int index) {
 		// TODO Auto-generated method stub
-		this.brickArray[index] = null;
+		TileManager.brickArray[index] = null;
 	}
 	
 	public boolean isCollisionWithBricks(Sprite a) {
@@ -84,5 +92,13 @@ public class TileManager {
 			}
 		}
 		return false;
+	}
+
+	public Sprite getGoldenBird() {
+		return goldenBird;
+	}
+
+	public void setGoldenBird(Sprite goldenBird) {
+		this.goldenBird = goldenBird;
 	}
 }

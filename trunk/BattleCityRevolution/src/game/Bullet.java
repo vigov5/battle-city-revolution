@@ -12,7 +12,6 @@ public class Bullet extends Sprite {
 	private int currentType;
 	private Tank parent;
 	private boolean destroyed = false;
-	private int damage;
 
 	public Bullet(BufferedImage image, int frameHeight, int frameWidth, Tank parent) {
 		super(image, frameHeight, frameWidth);
@@ -91,6 +90,7 @@ public class Bullet extends Sprite {
 		MainCanvas.addExplosion(this.getX(), this.getY());
 		this.destroyed = true;
 	}
+	
 
 	public void setPositionAndBound(int x, int y) {
 		this.x = x;
