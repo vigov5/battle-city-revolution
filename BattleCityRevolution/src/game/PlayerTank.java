@@ -2,8 +2,11 @@ package game;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
-public class PlayerTank extends Tank {
+import Function.ReadFile;
 
+public class PlayerTank extends Tank {
+	
+	int keyleft,keyright,keyup,keydown,keypause,keyfire;
 	public boolean[] keyPressedState = { false, false, false, false };
 
 	public PlayerTank(BufferedImage image, int frameHeight, int frameWidth) {
@@ -11,27 +14,28 @@ public class PlayerTank extends Tank {
 		// TODO Auto-generated constructor stub
 		this.setTotalHealth(100);
 		this.currentHealth = this.totalHealth;
+		getKey();
 	}
 
 	public void keyPressedReact(KeyEvent e) {
-		//System.out.println("Key pressed = " + e.getKeyCode());
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
+		System.out.println("Key pressed = " + e.getKeyCode());
+		if (e.getKeyCode() == keyup) {
 			keyPressedState[Sprite.UP] = true;
 			setCurrentDirection(Sprite.UP);
 			this.setRunning(true);
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+		} else if (e.getKeyCode() == keydown) {
 			keyPressedState[Sprite.DOWN] = true;
 			this.setCurrentDirection(Sprite.DOWN);
 			this.setRunning(true);
-		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+		} else if (e.getKeyCode() == keyleft) {
 			keyPressedState[Sprite.LEFT] = true;
 			this.setCurrentDirection(Sprite.LEFT);
 			this.setRunning(true);
-		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		} else if (e.getKeyCode() == keyright) {
 			keyPressedState[Sprite.RIGHT] = true;
 			this.setCurrentDirection(Sprite.RIGHT);
 			this.setRunning(true);
-		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		} else if (e.getKeyCode() == keyfire) {
 			this.fire();
 		}
 	}
@@ -63,29 +67,39 @@ public class PlayerTank extends Tank {
 
 	public void keyReleasedReact(KeyEvent e) {
 		//System.out.println("Key released = " + e.getKeyCode());
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_UP:
+		int key = e.getKeyCode(); 
+		if (key == keyup){
 			this.keyPressedState[Sprite.UP] = false;
 			if (this.getCurrentDirection() == Sprite.UP)
 				this.setRunning(false);
-			break;
-		case KeyEvent.VK_DOWN:
+		}
+		if (key == keydown){
 			this.keyPressedState[Sprite.DOWN] = false;
 			if (this.getCurrentDirection() == Sprite.DOWN)
 				this.setRunning(false);
-			break;
-		case KeyEvent.VK_LEFT:
+		}
+		if (key == keyleft){
 			this.keyPressedState[Sprite.LEFT] = false;
 			if (this.getCurrentDirection() == Sprite.LEFT)
 				this.setRunning(false);
-			break;
-		case KeyEvent.VK_RIGHT:
+		}
+		if (key == keyright){
 			this.keyPressedState[Sprite.RIGHT] = false;
 			if (this.getCurrentDirection() == Sprite.RIGHT)
 				this.setRunning(false);
-			break;
-		case KeyEvent.VK_SPACE:
-			break;
 		}
+		if  (key == keyfire){
+		}
+	}
+	
+	private void getKey(){
+		ReadFile rf = new ReadFile("Resources/Key.bcr");
+		keyleft=Integer.parseInt(rf.ReadOneLine());
+		keyright=Integer.parseInt(rf.ReadOneLine());
+		keydown=Integer.parseInt(rf.ReadOneLine());
+		keyup=Integer.parseInt(rf.ReadOneLine());
+		keyfire=Integer.parseInt(rf.ReadOneLine());
+		keypause=Integer.parseInt(rf.ReadOneLine());
+		rf.Close();
 	}
 }
