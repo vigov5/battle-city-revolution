@@ -22,6 +22,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public static TileManager tm;
 	public static ArrayList<Explosion> explosionArray;
 	public static ArrayList<Tank> tankArray;
+	public static ArrayList<Item> itemArray;
 	public final int SCREEN_WIDTH = 800;
 	public final int SCREEN_HEIGHT = 544;
 	private boolean isRunning;
