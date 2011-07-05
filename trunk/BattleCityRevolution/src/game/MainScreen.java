@@ -21,6 +21,7 @@ public class MainScreen {
 		myFrame.add(canvas, BorderLayout.CENTER);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		myFrame.setVisible(true);	
+		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public static void main(String[] argv) {
