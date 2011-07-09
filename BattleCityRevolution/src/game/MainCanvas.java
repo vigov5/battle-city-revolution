@@ -52,7 +52,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			tm = new TileManager("Resources/Maps/04.map");
 			ps.PlayBeginningSound();
 			testItem = new Item(MainCanvas.t.getItemImage(), 32, 32);
-			testItem.setType(testItem.BOMB);
+			testItem.setType(testItem.CLOCK);
 			testItem.setPositionAndBound(100, 100);
 			
 			// init tank and explosion array
@@ -93,7 +93,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void run() {
 		try {
-			thread.sleep(1500);
+			Thread.sleep(1500);
 		}catch (Exception e){}
 		while (true) {
 			animationClock++;
@@ -105,9 +105,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			for (int i=0; i<tankArray.size(); i++){
 				if (tankArray.get(i) instanceof AITank)
 					((game.AITank) tankArray.get(i)).think();
-				if (MainCanvas.t.isCollision(tankArray.get(0), testItem)){
+				if (MainCanvas.t.isCollision(tankArray.get(0), testItem) && !testItem.isDestroyed()){
 					testItem.applyEffect(tankArray.get(0));
-					testItem.applyEffect();
 					testItem.setDestroyed(true);
 				}
 				tankArray.get(i).update();

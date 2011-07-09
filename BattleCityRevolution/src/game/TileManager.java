@@ -20,14 +20,16 @@ public class TileManager {
 
 	private static Brick[] brickArray = new Brick[425];
 	private int totalBrick = 0;
-	private Sprite goldenBird;
+	private Sprite goldenEagle;
 	private BufferedImage background;
+	public int goldenEagleRow = 0;
+	public int goldenEagleCol = 0;
 
 	public TileManager(String mapFile) throws IOException {
 		background = MainCanvas.t.getTileImage().getSubimage(64, 32, 32, 32);
 		
-		goldenBird = new Sprite(MainCanvas.t.getTileImage().getSubimage(0, 96, 64, 32), 32, 32);
-		goldenBird.setFrameStrip(new int[]{0, 1});
+		goldenEagle = new Sprite(MainCanvas.t.getTileImage().getSubimage(0, 96, 64, 32), 32, 32);
+		goldenEagle.setFrameStrip(new int[]{0, 1});
 		
 		for (int i = 0; i < 100; i++)
 			brickArray[i] = null;
@@ -42,14 +44,17 @@ public class TileManager {
 					int c = in.read();
 					// System.out.println("c  = " + c);
 					if (Brick.isBrick(c)) {
-						brickArray[totalBrick] = new Brick(MainCanvas.t
+						Brick tmp = new Brick(MainCanvas.t
 								.getTileImage(), 32, 32, totalBrick, Brick.getBrickType(c));
-						brickArray[totalBrick].setPositionAndBound(j * 32,
-								i * 32);
+						brickArray[totalBrick].setPositionAndBound(j * 32, i * 32);
+						tmp.setRowAndCol(i, j);
+						brickArray[totalBrick] = tmp; 
 						totalBrick++;
 					} else if (c == 24) {
 						// Golden Bird
-						goldenBird.setPositionAndBound(j*32, i*32);
+						goldenEagle.setPositionAndBound(j*32, i*32);
+						goldenEagleCol = j;
+						goldenEagleRow = i;
 					}
 				}
 			}
@@ -71,7 +76,7 @@ public class TileManager {
 		for (int i = 0; i < totalBrick; i++)
 			if (brickArray[i] != null)
 				brickArray[i].render(g);
-		goldenBird.render(g);
+		goldenEagle.render(g);
 	}
 
 	public Brick[] getBrickArray() {
@@ -99,10 +104,10 @@ public class TileManager {
 	}
 
 	public Sprite getGoldenBird() {
-		return goldenBird;
+		return goldenEagle;
 	}
 
 	public void setGoldenBird(Sprite goldenBird) {
-		this.goldenBird = goldenBird;
+		this.goldenEagle = goldenBird;
 	}
 }
