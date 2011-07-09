@@ -49,7 +49,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		t = new Tools(this);
 		try {
-			tm = new TileManager("Resources/Maps/09.map");
+			tm = new TileManager("Resources/Maps/04.map");
 			ps.PlayBeginningSound();
 			testItem = new Item(MainCanvas.t.getItemImage(), 32, 32);
 			testItem.setType(testItem.BOMB);

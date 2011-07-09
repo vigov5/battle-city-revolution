@@ -12,6 +12,8 @@ public class AITank extends Tank {
 	private boolean keepDoing = false;
 
 	private boolean frezzed = false;
+	
+	int level = 1;
 
 	public AITank(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
@@ -27,31 +29,66 @@ public class AITank extends Tank {
 		if (frezzed){
 			this.setRunning(false);
 		}
-		else {
-			rnd = new Random(new Date().getTime());
-			int i = 0;
-			for (int j = 0; j < 10; j++)
-				i = rnd.nextInt(100);
-
-			if (i % 37 == 0) {
-				// change direction
-				this.setKeepDoing(false);
-				this.setRunning(true);
-				this.setCurrentDirection(rnd.nextInt(4));
-			}
-
-			if (i < 50) {
-				this.setRunning(true);
-				this.setKeepDoing(true);
-				if (this.pathBlocked) {
+		else if (getLuck()){
+			int playerx = MainCanvas.tankArray.get(0).getBoundX();
+			int playery = MainCanvas.tankArray.get(0).getBoundY();
+			int tankx = this.getBoundX();
+			int tanky = this.getBoundY();
+			
+			if (tankx - 32 <= playerx && playerx <= tankx + 32){
+				if (tanky <= playery) {
+					this.setCurrentDirection(Sprite.DOWN);
 					this.fire();
-					this.setCurrentDirection(rnd.nextInt(4));
+				}
+				else if (tanky > playery ){
+					this.setCurrentDirection(Sprite.UP);
+					this.fire();
 				}
 			}
-
-			if (i % 11 == 0)
-				fire();
+			else if (tanky - 32 <= playery && playery <= tanky + 32){
+				if (tankx <= playerx){
+					this.setCurrentDirection(Sprite.RIGHT);
+					this.fire();
+				}
+				else if (tankx > playerx){
+					this.setCurrentDirection(Sprite.LEFT);
+					this.fire();
+				}
+			}
 		}
+		else RandomAction();
+	}
+	
+	public boolean getLuck(){
+		rnd = new Random(new Date().getTime());
+		if (level + rnd.nextInt(10) > 5) return true;
+		return false ;
+	}
+	
+	public void RandomAction(){
+		rnd = new Random(new Date().getTime());
+		int i = 0;
+		for (int j = 0; j < 10; j++)
+			i = rnd.nextInt(100);
+
+		if (i % 37 == 0) {
+			// change direction
+			this.setKeepDoing(false);
+			this.setRunning(true);
+			this.setCurrentDirection(rnd.nextInt(4));
+		}
+
+		if (i < 50) {
+			this.setRunning(true);
+			this.setKeepDoing(true);
+			if (this.pathBlocked) {
+				this.fire();
+				this.setCurrentDirection(rnd.nextInt(4));
+			}
+		}
+
+		if (i % 11 == 0)
+			fire();
 	}
 
 	public boolean isKeepDoing() {
