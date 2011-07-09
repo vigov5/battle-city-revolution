@@ -1,9 +1,11 @@
 package game;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,8 +14,11 @@ import javax.swing.JPanel;
 public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	/**
-	 * 
+	 * TODO
+	 * add right menu
+	 * add stage change after clear up
 	 */
+	
 	private static final long serialVersionUID = 1270488992849705712L;
 	private long sleepTime = 20;
 	private PlayerTank playerTank;
@@ -23,7 +28,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public static ArrayList<Explosion> explosionArray;
 	public static ArrayList<Tank> tankArray;
 	public static ArrayList<Item> itemArray;
-	public final int SCREEN_WIDTH = 800;
+	public final int SCREEN_WIDTH = 1000;
 	public final int SCREEN_HEIGHT = 544;
 	private boolean isRunning;
 	private static boolean gameOver;
@@ -55,7 +60,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			
 			// create tanks and add to array 
 			playerTank = new PlayerTank(t.getTankOneImage(), 32, 32);
-			playerTank.setPositionAndBound(0, 0);
+			playerTank.setPositionAndBound(10*32, 16*32);
+			// pleyr tank is allway at first place of tank array 
 			tankArray.add(playerTank);
 			for (int i=0; i<3; i++){
 				AITank tmp = new AITank(t.getTankTwoImage(), 32, 32);
@@ -124,17 +130,52 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		tm.render(g);
+		// render item 
 		if (!testItem.isDestroyed()) testItem.render(g);
+		
+		// render tanks
 		for (int i=0; i<tankArray.size(); i++){
 			tankArray.get(i).render(g);
 		}
+		
+		// render explosion effects
 		if (!explosionArray.isEmpty()){
 			for (int i=0; i<explosionArray.size(); i++){
 				explosionArray.get(i).render(g);
 			}
 		}
+		
+		// render right menu
+		drawRightMenu(g);
 	}
 	
+	private void drawRightMenu(Graphics g) {
+		// TODO Auto-generated method stub
+		g.setColor(Color.BLACK);
+		g.fillRect(800, 0, 200, 544);
+		g.translate(800, 0);
+		g.setColor(Color.WHITE);
+		g.drawString("LEVEL ", 10, 20);
+		g.drawString("SCORE:", 10, 40);
+		g.drawString(String.valueOf(((PlayerTank) tankArray.get(0)).getScore()), 100, 40);
+		g.drawString("HEALTH:", 10, 80);
+		g.drawString(String.valueOf(((PlayerTank) tankArray.get(0)).currentHealth) + "/" +
+				String.valueOf(((PlayerTank) tankArray.get(0)).totalHealth), 100, 80);
+		
+		g.drawString("LIVES:", 10, 120);
+		try {
+			BufferedImage lives = MainCanvas.t.getItemImage().getSubimage(64, 0, 32, 32);
+			for (int i=0; i< ((PlayerTank) tankArray.get(0)).getLives(); i++){
+				g.drawImage(lives, 20*i, 120, 32, 32, null);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		g.translate(0, 0);
+	}
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -170,13 +211,5 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	public boolean isRunning() {
 		return isRunning;
-	}
-	
-	public int getWidth(){
-		return SCREEN_WIDTH;
-	}
-	
-	public int getHeight(){
-		return SCREEN_HEIGHT;
 	}	
 }

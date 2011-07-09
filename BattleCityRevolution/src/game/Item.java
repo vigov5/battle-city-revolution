@@ -5,6 +5,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Item extends Sprite {
+	
+	/*
+	 * TODO
+	 * iplement Shovel, bomb function 
+	 * 
+	 */
 
 	public final int BIG_BULLET = 0;
 	public final int MISSILE_BULLET = 1;

@@ -77,8 +77,8 @@ public class Tools {
 	public boolean isOutScreen(Sprite a){
 		if (a.getBoundX() < 0 ||
 			a.getBoundY() < 0 ||
-			a.getBoundY()+ a.getBoundHeight() > mc.getHeight() ||
-		    a.getBoundX() + a.getBoundWidth() > mc.getWidth()) {
+			a.getBoundY()+ a.getBoundHeight() > 544 ||
+		    a.getBoundX() + a.getBoundWidth() > 800) {
 		return true;
 		}
 		return false; 

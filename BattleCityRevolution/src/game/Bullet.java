@@ -19,8 +19,7 @@ public class Bullet extends Sprite {
 		this.setCurrentDirection(parent.getCurrentDirection());
 		this.parent = parent;
 		this.setPositionAndBound(parent.getX(), parent.getY());
-		this.currentType = SMALL_BULLET;
-		this.setFrame(4);
+		this.setCurrentDirection(parent.getCurrentDirection());
 	}
 	
 	public int getDamage(){
@@ -30,7 +29,7 @@ public class Bullet extends Sprite {
 		case BIG_BULLET:
 			return 20;
 		case MISSILE_BULLET:
-			return 30;
+			return 50;
 		}
 		return 0;
 	}
@@ -55,22 +54,22 @@ public class Bullet extends Sprite {
 		return this.destroyed;
 	}
 
-	public void setType(int type) {
-		this.currentType = type;
-	}
-
 	public void update() {
 		switch (this.getCurrentDirection()) {
 		case Sprite.UP:
 			this.setPositionAndBound(this.x, this.y - speed);
+			if (this.currentType == MISSILE_BULLET) this.setFrame(0);
 			break;
 		case Sprite.DOWN:
 			this.setPositionAndBound(this.x, this.y + speed);
+			if (this.currentType == MISSILE_BULLET) this.setFrame(2);
 			break;
 		case Sprite.LEFT:
 			this.setPositionAndBound(this.x - speed, this.y);
+			if (this.currentType == MISSILE_BULLET) this.setFrame(1);
 			break;
 		case Sprite.RIGHT:
+			if (this.currentType == MISSILE_BULLET) this.setFrame(3);
 			this.setPositionAndBound(this.x + speed, this.y);
 			break;
 		}
@@ -80,6 +79,7 @@ public class Bullet extends Sprite {
 					&& MainCanvas.t.isCollision(this, MainCanvas.tm
 							.getBrickArray()[i])) {
 				hit = true;
+				MainCanvas.tm.getBrickArray()[i].addDamage(this.getDamage());
 				MainCanvas.tm.getBrickArray()[i].update();
 			}
 		}
@@ -95,10 +95,32 @@ public class Bullet extends Sprite {
 	public void setPositionAndBound(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.setBound(13, 13, 6, 6);
+		switch (this.currentType){
+		case SMALL_BULLET:
+			this.setBound(13, 13, 6, 6);
+			break;
+		case BIG_BULLET:
+			this.setBound(13, 13, 6, 6);
+			break;
+		case MISSILE_BULLET:
+			switch (this.currentDirection){
+			case Sprite.UP:
+			case Sprite.DOWN:
+				this.setBound(14, 12, 5, 8);
+				break;
+			case Sprite.LEFT:
+			case Sprite.RIGHT:
+				this.setBound(12, 14, 8, 5);
+				break;
+			}
+		}
+		
 	}
 	
 	public void setBulletType(int type){
 		this.currentType = type;
+		this.currentType = type;
+		if (type == SMALL_BULLET) this.setFrame(4);
+		if (type == BIG_BULLET) this.setFrame(5);
 	}
 }

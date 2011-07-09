@@ -1,12 +1,25 @@
 package game;
+
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import Function.ReadFile;
 
 public class PlayerTank extends Tank {
-	
-	int keyleft,keyright,keyup,keydown,keypause,keyfire;
+
+	/*
+	 * TODO add lives function
+	 */
+
+	int keyleft;
+	int keyright;
+	int keyup;
+	int keydown;
+	int keypause;
+	int keyfire;
+	int lives;
+	int score;
+
 	public boolean[] keyPressedState = { false, false, false, false };
 
 	public PlayerTank(BufferedImage image, int frameHeight, int frameWidth) {
@@ -14,11 +27,13 @@ public class PlayerTank extends Tank {
 		// TODO Auto-generated constructor stub
 		this.setTotalHealth(100);
 		this.currentHealth = this.totalHealth;
+		this.lives = 3;
+		this.score = 0;
 		getKey();
 	}
 
 	public void keyPressedReact(KeyEvent e) {
-		System.out.println("Key pressed = " + e.getKeyCode());
+		// System.out.println("Key pressed = " + e.getKeyCode());
 		if (e.getKeyCode() == keyup) {
 			keyPressedState[Sprite.UP] = true;
 			setCurrentDirection(Sprite.UP);
@@ -42,64 +57,92 @@ public class PlayerTank extends Tank {
 
 	public void update() {
 		super.update();
-		int count = 0;
-		for (int i = 0; i < this.keyPressedState.length; i++) {
-			if (this.keyPressedState[i]) {
-				count++;
+		if (this.isDestroyed()) {
+			this.lives--;
+			this.respawnd();
+		} else {
+			int count = 0;
+			for (int i = 0; i < this.keyPressedState.length; i++) {
+				if (this.keyPressedState[i]) {
+					count++;
+				}
 			}
-		}
 
-		for (int i = 0; i < this.keyPressedState.length; i++) {
-			if (this.keyPressedState[i]) {
-				if (count >= 2) {
-					if (this.getCurrentDirection() != i) {
+			for (int i = 0; i < this.keyPressedState.length; i++) {
+				if (this.keyPressedState[i]) {
+					if (count >= 2) {
+						if (this.getCurrentDirection() != i) {
+							this.setRunning(true);
+						}
+					}
+
+					if (count == 1) {
+						this.setCurrentDirection(i);
 						this.setRunning(true);
 					}
-				}
-
-				if (count == 1) {
-					this.setCurrentDirection(i);
-					this.setRunning(true);
 				}
 			}
 		}
 	}
 
+	private void respawnd() {
+		// TODO Auto-generated method stub
+		this.setPositionAndBound(10 * 32, 16 * 32);
+		this.currentHealth = this.totalHealth;
+		this.setDestroyed(false);
+	}
+
 	public void keyReleasedReact(KeyEvent e) {
-		//System.out.println("Key released = " + e.getKeyCode());
-		int key = e.getKeyCode(); 
-		if (key == keyup){
+		int key = e.getKeyCode();
+		if (key == keyup) {
 			this.keyPressedState[Sprite.UP] = false;
 			if (this.getCurrentDirection() == Sprite.UP)
 				this.setRunning(false);
 		}
-		if (key == keydown){
+		if (key == keydown) {
 			this.keyPressedState[Sprite.DOWN] = false;
 			if (this.getCurrentDirection() == Sprite.DOWN)
 				this.setRunning(false);
 		}
-		if (key == keyleft){
+		if (key == keyleft) {
 			this.keyPressedState[Sprite.LEFT] = false;
 			if (this.getCurrentDirection() == Sprite.LEFT)
 				this.setRunning(false);
 		}
-		if (key == keyright){
+		if (key == keyright) {
 			this.keyPressedState[Sprite.RIGHT] = false;
 			if (this.getCurrentDirection() == Sprite.RIGHT)
 				this.setRunning(false);
 		}
-		if  (key == keyfire){
+		if (key == keyfire) {
 		}
 	}
-	
-	private void getKey(){
+
+	private void getKey() {
 		ReadFile rf = new ReadFile("Resources/Key.bcr");
-		keyleft=Integer.parseInt(rf.ReadOneLine());
-		keyright=Integer.parseInt(rf.ReadOneLine());
-		keydown=Integer.parseInt(rf.ReadOneLine());
-		keyup=Integer.parseInt(rf.ReadOneLine());
-		keyfire=Integer.parseInt(rf.ReadOneLine());
-		keypause=Integer.parseInt(rf.ReadOneLine());
+		keyleft = Integer.parseInt(rf.ReadOneLine());
+		keyright = Integer.parseInt(rf.ReadOneLine());
+		keydown = Integer.parseInt(rf.ReadOneLine());
+		keyup = Integer.parseInt(rf.ReadOneLine());
+		keyfire = Integer.parseInt(rf.ReadOneLine());
+		// keypause=Integer.parseInt(rf.ReadOneLine());
 		rf.Close();
+	}
+
+	public int getLives() {
+		// TODO Auto-generated method stub
+		return this.lives;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void addScore(int i) {
+		this.score += i;
 	}
 }

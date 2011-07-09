@@ -7,8 +7,11 @@ import java.io.IOException;
 
 /*
  * Map file
- * 
- * 
+ * TODO 
+ * add more brick style
+ * add sea style
+ * add rock style
+ * record around golden bird place for item use 
  */
 
 public class TileManager {
@@ -64,6 +67,7 @@ public class TileManager {
 				g.drawImage(background, j * 32, i * 32, null);
 			}
 		}
+		
 		for (int i = 0; i < totalBrick; i++)
 			if (brickArray[i] != null)
 				brickArray[i].render(g);

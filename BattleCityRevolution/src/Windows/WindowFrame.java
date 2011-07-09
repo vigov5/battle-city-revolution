@@ -23,7 +23,7 @@ public class WindowFrame extends JFrame{
 	
 	public WindowFrame (){
 		super("TANK");
-		setPreferredSize(new Dimension (800,575));
+		setPreferredSize(new Dimension (1000,575));
 		setBackground(Color.WHITE);
 		play = fp.getPlayButton();
 		add(fp, BorderLayout.CENTER);
