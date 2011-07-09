@@ -18,7 +18,7 @@ public class TileManager {
 	private final int MAP_WIDTH = 25;
 	private final int MAP_HEIGHT = 17;
 
-	private static Brick[] brickArray = new Brick[200];
+	private static Brick[] brickArray = new Brick[500];
 	private int totalBrick = 0;
 	private Sprite goldenBird;
 	private BufferedImage background;
@@ -43,7 +43,7 @@ public class TileManager {
 					// System.out.println("c  = " + c);
 					if (Brick.isBrick(c)) {
 						brickArray[totalBrick] = new Brick(MainCanvas.t
-								.getTileImage(), 32, 32, totalBrick);
+								.getTileImage(), 32, 32, totalBrick, Brick.getBrickType(c));
 						brickArray[totalBrick].setPositionAndBound(j * 32,
 								i * 32);
 						totalBrick++;

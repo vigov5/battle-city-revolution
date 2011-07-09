@@ -4,14 +4,26 @@ import java.awt.image.BufferedImage;
 
 public class Brick extends Sprite {
 
-	private static int[] frameStrip = { 0, 1, 2, 3 };
+	private static int[][] frameStrip = {{ 0, 1, 2, 3 },
+										{4, 5, 6, 7},
+										{16, 17, 18, 19},
+										{20, 21, 22, 23},
+										{12, 13, 14, 15},
+										{28, 29, 31, 31}};
 	private int index;
+	public final int RED_V_BRICK = 0;
+	public final int RED_H_BRICK = 1;
+	public final int BLUE_V_BRICK = 2;
+	public final int BLUE_H_BRICK = 3;
+	public final int WHITE_ROCK = 4;
+	public final int GREEN_ROCK = 5;
+	
 	private int currentHealth;
 
-	public Brick(BufferedImage image, int frameHeight, int frameWidth, int index) {
+	public Brick(BufferedImage image, int frameHeight, int frameWidth, int index, int type) {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
-		this.setFrameStrip(frameStrip);
+		this.setFrameStrip(frameStrip[type]);
 		this.index = index;
 		this.setFrame(0);
 		this.setBound(0, 0, frameWidth, frameHeight);
@@ -20,7 +32,8 @@ public class Brick extends Sprite {
 
 	public static boolean isBrick(int frameNumber) {
 		for (int i = 0; i < frameStrip.length; i++)
-			if (frameNumber == frameStrip[i])
+			for (int j = 0; j < frameStrip[i].length; j++)
+			if (frameNumber == frameStrip[i][j])
 				return true;
 		return false;
 	}
@@ -45,6 +58,11 @@ public class Brick extends Sprite {
 		if (this.currentHealth - damage >= 0){
 			this.currentHealth -= damage;
 		} else this.currentHealth = 0;
+	}
+
+	public static int getBrickType(int c) {
+		
+		return 0;
 	}
 	
 	
