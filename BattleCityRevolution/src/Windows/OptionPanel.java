@@ -164,7 +164,7 @@ public class OptionPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	private void writeSetting(){
+	public void writeSetting(){
 		String s = "Sound " + soundstate; 
 		wf = new WriteFile("Resources/Setting.bcr",s);
 	}

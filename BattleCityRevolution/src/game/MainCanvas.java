@@ -9,7 +9,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
+
+import Function.PlaySound;
 
 public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
@@ -33,6 +37,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	private boolean isRunning;
 	private static boolean gameOver;
 	private Item testItem;
+	PlaySound ps = new PlaySound();
+	Thread thread;
 
 	public static boolean isGameOver() {
 		return gameOver;
@@ -47,7 +53,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		t = new Tools(this);
 		try {
 			tm = new TileManager("Resources/Maps/04.map");
-			
+			ps.PlayBeginningSound();
 			testItem = new Item(MainCanvas.t.getItemImage(), 32, 32);
 			testItem.setType(testItem.CLOCK);
 			testItem.setPositionAndBound(100, 100);
@@ -70,20 +76,28 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			}
 			
 			this.setRunning(false);
-			Thread t = new Thread(this);
-			t.start();
-			
-			
+			thread = new Thread(this);
+			thread.start();
 			this.setFocusable(true);
 			this.addKeyListener(this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		repaint();
 	}
-
+	
+	public void Start(){	
+	}
+	
+	public void Pause() throws InterruptedException{
+	}
+	
 	@Override
 	public void run() {
+		try {
+			thread.sleep(1500);
+		}catch (Exception e){}
 		while (true) {
 			animationClock++;
 			if (animationClock == 2147483647) {
