@@ -28,7 +28,7 @@ public class Tank extends Sprite {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
 		this.setBound(0, 0, frameWidth, frameHeight);
-		bulletType = Bullet.SMALL_BULLET;
+		bulletType = Bullet.MISSILE_BULLET;
 		// create a null bullet array
 		bulletArray = new ArrayList<Bullet>(MAX_BULLET);
 		bulletArray.clear();
@@ -89,7 +89,7 @@ public class Tank extends Sprite {
 		 * bulletArrayStart
 		 */
 		Bullet tmp = new Bullet(MainCanvas.t.getBulletImage(), 32, 32, parent);
-		tmp.setType(type);
+		tmp.setBulletType(type);
 		bulletArray.add(tmp);
 	}
 
@@ -142,9 +142,10 @@ public class Tank extends Sprite {
 			//System.out.println("Current health = " + this.currentHealth);
 		}
 
-		if (this.currentHealth <= 0)
+		if (this.currentHealth <= 0){
 			this.isDestroyed = true;
-		
+			if (this instanceof AITank) ((PlayerTank) MainCanvas.tankArray.get(0)).addScore(10);
+		}
 		checkBulletsOutOfScreen();
 	}
 	
