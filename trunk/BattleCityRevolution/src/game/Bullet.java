@@ -25,9 +25,9 @@ public class Bullet extends Sprite {
 	public int getDamage(){
 		switch (currentType){
 		case SMALL_BULLET:
-			return 10;
+			return 25;
 		case BIG_BULLET:
-			return 20;
+			return 30;
 		case MISSILE_BULLET:
 			return 50;
 		}
@@ -77,9 +77,9 @@ public class Bullet extends Sprite {
 		for (int i = 0; i < MainCanvas.tm.getTotalBrick(); i++) {
 			if (MainCanvas.tm.getBrickArray()[i] != null
 					&& MainCanvas.t.isCollision(this, MainCanvas.tm
-							.getBrickArray()[i])) {
+							.getBrickArray()[i]) && MainCanvas.tm.getBrickArray()[i].getType() != Brick.SEA) {
 				hit = true;
-				MainCanvas.tm.getBrickArray()[i].addDamage(this.getDamage());
+				MainCanvas.tm.getBrickArray()[i].computeDamage(this.getDamage(), this);
 				MainCanvas.tm.getBrickArray()[i].update();
 			}
 		}
@@ -122,5 +122,9 @@ public class Bullet extends Sprite {
 		this.currentType = type;
 		if (type == SMALL_BULLET) this.setFrame(4);
 		if (type == BIG_BULLET) this.setFrame(5);
+	}
+	
+	public int getBulletType(){
+		return this.currentType;
 	}
 }

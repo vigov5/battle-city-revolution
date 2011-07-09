@@ -18,7 +18,7 @@ public class TileManager {
 	private final int MAP_WIDTH = 25;
 	private final int MAP_HEIGHT = 17;
 
-	private static Brick[] brickArray = new Brick[500];
+	private static Brick[] brickArray = new Brick[425];
 	private int totalBrick = 0;
 	private Sprite goldenBird;
 	private BufferedImage background;
@@ -47,8 +47,8 @@ public class TileManager {
 						brickArray[totalBrick].setPositionAndBound(j * 32,
 								i * 32);
 						totalBrick++;
-					}
-					if (c == 24){
+					} else if (c == 24) {
+						// Golden Bird
 						goldenBird.setPositionAndBound(j*32, i*32);
 					}
 				}
@@ -92,7 +92,7 @@ public class TileManager {
 			if (MainCanvas.tm.getBrickArray()[i] != null
 					&& MainCanvas.t.isCollision(a, MainCanvas.tm
 							.getBrickArray()[i])) {
-				return true;
+				if (a instanceof Tank) return true;
 			}
 		}
 		return false;
