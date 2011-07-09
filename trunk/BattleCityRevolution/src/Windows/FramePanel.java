@@ -128,7 +128,7 @@ public class FramePanel extends JPanel implements ActionListener{
 		}
 		if (s.indexOf("BACK")>-1){
 			switch (state){
-			case 2 : remove(optionpanel); break;
+			case 2 : remove(optionpanel);optionpanel.writeSetting(); break;
 			case 3 : remove(rankingpanel); break;
 			case 4 : remove(helppanel); break;
 			case 5 : remove(aboutpanel); break;

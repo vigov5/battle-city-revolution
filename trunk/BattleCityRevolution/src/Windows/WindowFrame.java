@@ -11,17 +11,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class WindowFrame extends JFrame{
 	
 	FramePanel fp = new FramePanel();
-	MainCanvas maincanvas = new MainCanvas();
+	MainCanvas maincanvas;
 	JButton play;
 	Dimension d;
 	
-	public WindowFrame (){
+	public WindowFrame () {
 		super("TANK");
 		setPreferredSize(new Dimension (1000,575));
 		setBackground(Color.WHITE);
@@ -33,6 +35,9 @@ public class WindowFrame extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				remove(fp);
+				try {
+					maincanvas = new MainCanvas();
+				} catch (Exception e){}
 				addMaincanvas();
 				repaint();
 			}
