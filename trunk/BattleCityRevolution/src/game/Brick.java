@@ -16,6 +16,8 @@ public class Brick extends Sprite {
 	public static final int WHITE_ROCK = 4;
 	public static final int GREEN_ROCK = 5;
 	public static int SEA = 6; 
+	public int row;
+	public int col;
 
 	private int currentHealth;
 
@@ -88,6 +90,12 @@ public class Brick extends Sprite {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public void setRowAndCol(int i, int j) {
+		// TODO Auto-generated method stub
+		this.row = i;
+		this.col = j;
 	}
 
 	

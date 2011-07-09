@@ -47,6 +47,20 @@ public class Item extends Sprite {
 			} else
 				a.setCurrentHealth(a.getCurrentHealth() + 50);
 			break;
+		case SHOVEL:
+			if (a instanceof PlayerTank) {
+				/*
+				int row = MainCanvas.tm.goldenEagleRow;
+				int col = MainCanvas.tm.goldenEagleCol;
+				for (int i=0; i<MainCanvas.tm.getTotalBrick(); i++){
+					Brick tmp = MainCanvas.tm.getBrickArray()[i];
+					if (tmp.row == MainCanvas.tm.goldenEagleRow + 1){
+							
+					}
+				}
+				*/
+			}
+			break;
 		case THUNDER_BOOST:
 			a.setSpeedStep(4);
 			Timer t = new Timer();
@@ -67,9 +81,11 @@ public class Item extends Sprite {
 			System.out.println("Add one live");
 			break;
 		case BOMB:
-			for (int i = 0; i < MainCanvas.tankArray.size(); i++) {
-				if (MainCanvas.tankArray.get(i) instanceof AITank) {
-					MainCanvas.tankArray.get(i).receivedDamage += 50;
+			if (a instanceof PlayerTank) {
+				for (int i = 0; i < MainCanvas.tankArray.size(); i++) {
+					if (MainCanvas.tankArray.get(i) instanceof AITank) {
+						MainCanvas.tankArray.get(i).receivedDamage += 50;
+					}
 				}
 			}
 			break;
