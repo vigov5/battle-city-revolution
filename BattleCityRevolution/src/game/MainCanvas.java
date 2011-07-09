@@ -1,7 +1,6 @@
 package game;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,8 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
 
 import Function.PlaySound;
@@ -52,10 +49,10 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		t = new Tools(this);
 		try {
-			tm = new TileManager("Resources/Maps/04.map");
+			tm = new TileManager("Resources/Maps/09.map");
 			ps.PlayBeginningSound();
 			testItem = new Item(MainCanvas.t.getItemImage(), 32, 32);
-			testItem.setType(testItem.CLOCK);
+			testItem.setType(testItem.BOMB);
 			testItem.setPositionAndBound(100, 100);
 			
 			// init tank and explosion array
@@ -67,7 +64,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			// create tanks and add to array 
 			playerTank = new PlayerTank(t.getTankOneImage(), 32, 32);
 			playerTank.setPositionAndBound(10*32, 16*32);
-			// pleyr tank is allway at first place of tank array 
+			// player tank is alway at first place of tank array 
 			tankArray.add(playerTank);
 			for (int i=0; i<3; i++){
 				AITank tmp = new AITank(t.getTankTwoImage(), 32, 32);
@@ -108,8 +105,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			for (int i=0; i<tankArray.size(); i++){
 				if (tankArray.get(i) instanceof AITank)
 					((game.AITank) tankArray.get(i)).think();
-				if (MainCanvas.t.isCollision(tankArray.get(i), testItem)){
-					testItem.applyEffect(tankArray.get(i));
+				if (MainCanvas.t.isCollision(tankArray.get(0), testItem)){
+					testItem.applyEffect(tankArray.get(0));
 					testItem.applyEffect();
 					testItem.setDestroyed(true);
 				}

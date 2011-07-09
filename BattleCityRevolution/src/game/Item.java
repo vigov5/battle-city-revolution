@@ -5,11 +5,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Item extends Sprite {
-	
+
 	/*
-	 * TODO
-	 * iplement Shovel, bomb function 
-	 * 
+	 * TODO implement Shovel, bomb function
 	 */
 
 	public final int BIG_BULLET = 0;
@@ -31,8 +29,6 @@ public class Item extends Sprite {
 	public void applyEffect() {
 		switch (type) {
 		case CLOCK:
-			break;
-		case BOMB:
 			break;
 		case SHOVEL:
 			break;
@@ -70,6 +66,13 @@ public class Item extends Sprite {
 		case LIVE:
 			System.out.println("Add one live");
 			break;
+		case BOMB:
+			for (int i = 0; i < MainCanvas.tankArray.size(); i++) {
+				if (MainCanvas.tankArray.get(i) instanceof AITank) {
+					MainCanvas.tankArray.get(i).receivedDamage += 50;
+				}
+			}
+			break;
 		}
 	}
 
@@ -102,7 +105,8 @@ public class Item extends Sprite {
 			case CLOCK:
 				for (int i = 0; i < MainCanvas.tankArray.size(); i++) {
 					if (MainCanvas.tankArray.get(i) instanceof AITank) {
-						((AITank) MainCanvas.tankArray.get(i)).setFrezzed(false);
+						((AITank) MainCanvas.tankArray.get(i))
+								.setFrezzed(false);
 					}
 				}
 			}
