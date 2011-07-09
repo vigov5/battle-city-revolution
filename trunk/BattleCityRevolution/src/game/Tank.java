@@ -270,8 +270,8 @@ public class Tank extends Sprite {
 		try {
 			if (System.currentTimeMillis() - lastBulletTime > bulletDelayTime) {
 				this.addBullet(this, bulletType);
+				lastBulletTime = System.currentTimeMillis();
 			}
-			lastBulletTime = System.currentTimeMillis();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

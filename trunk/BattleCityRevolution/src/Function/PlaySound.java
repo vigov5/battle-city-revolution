@@ -31,7 +31,6 @@ public class PlaySound {
 		try {
 			ais = AudioSystem.getAudioInputStream(soundFile);
 			audioFormat = ais.getFormat();
-		    System.out.println(audioFormat);
 		    DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class,audioFormat);
 		    sdl =(SourceDataLine)AudioSystem.getLine(dataLineInfo);
 		    new PlayThread().start();
