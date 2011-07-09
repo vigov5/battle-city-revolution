@@ -22,42 +22,42 @@ public class Tools {
 	
 	public BufferedImage getTankOneImage() throws IOException {
 		if (tankOneImage == null){
-			tankOneImage = ImageIO.read(new File("tank1.png"));
+			tankOneImage = ImageIO.read(new File("Resources/Sprites/tank1.png"));
 		}
 		return tankOneImage;
 	}
 
 	public BufferedImage getBulletImage() throws IOException {
 		if (bulletImage == null){
-			bulletImage = ImageIO.read(new File ("bullet.png"));
+			bulletImage = ImageIO.read(new File ("Resources/Sprites/bullet.png"));
 		}
 		return bulletImage;
 	}
 	
 	public BufferedImage getTileImage() throws IOException {
 		if (tileImage  == null){
-			tileImage = ImageIO.read(new File("tileset1.png"));
+			tileImage = ImageIO.read(new File("Resources/Sprites/tileset1.png"));
 		}
 		return tileImage;
 	}
 	
 	public BufferedImage getTankTwoImage() throws IOException {
 		if (tankTwoImage == null){
-			tankTwoImage = ImageIO.read(new File("tank2.png"));
+			tankTwoImage = ImageIO.read(new File("Resources/Sprites/tank2.png"));
 		}
 		return tankTwoImage;
 	}
 	
 	public BufferedImage getExplosionImage() throws IOException {
 		if (explosionImage  == null){
-			explosionImage = ImageIO.read(new File("explosion1.png"));
+			explosionImage = ImageIO.read(new File("Resources/Sprites/explosion1.png"));
 		}
 		return explosionImage;
 	}
 	
 	public BufferedImage getItemImage() throws IOException {
 		if (itemImage  == null){
-			itemImage = ImageIO.read(new File("items.png"));
+			itemImage = ImageIO.read(new File("Resources/Sprites/items.png"));
 		}
 		return itemImage;
 	}
