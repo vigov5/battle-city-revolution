@@ -19,7 +19,7 @@ public class Tank extends Sprite {
 	private final int MAX_BULLET = 100;
 	private ArrayList<Bullet> bulletArray;
 	protected int bulletType;
-	protected long bulletDelayTime = 50;
+	protected long bulletDelayTime = 150;
 	protected long lastBulletTime = 0;
 	protected boolean pathBlocked = false;
 	protected int receivedDamage = 0;
@@ -28,7 +28,7 @@ public class Tank extends Sprite {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
 		this.setBound(0, 0, frameWidth, frameHeight);
-		bulletType = Bullet.MISSILE_BULLET;
+		bulletType = Bullet.SMALL_BULLET;
 		// create a null bullet array
 		bulletArray = new ArrayList<Bullet>(MAX_BULLET);
 		bulletArray.clear();
@@ -149,6 +149,14 @@ public class Tank extends Sprite {
 		checkBulletsOutOfScreen();
 	}
 	
+	public void checkCollisonWithItem(){
+		for (int i=0; i< MainCanvas.itemArray.size(); i++){
+			if (MainCanvas.t.isCollision(this, MainCanvas.itemArray.get(i))){
+				MainCanvas.itemArray.get(i).applyEffect(this);
+				MainCanvas.itemArray.get(i).setDestroyed(true);
+			}
+		}
+	}
 	
 
 	private void checkBulletsOutOfScreen() {
@@ -178,11 +186,11 @@ public class Tank extends Sprite {
 		switch (this.getCurrentDirection()) {
 		case Sprite.DOWN:
 		case Sprite.UP:
-			this.setBound(4, 1, 24, 30);
+			this.setBound(5, 2, 21, 26);
 			break;
 		case Sprite.LEFT:
 		case Sprite.RIGHT:
-			this.setBound(1, 4, 30, 24);
+			this.setBound(2, 5, 26, 21);
 			break;
 		}
 	}
@@ -210,7 +218,7 @@ public class Tank extends Sprite {
 		return bulletType;
 	}
 
-	public void setBulletType(int bulletType) {
+	public synchronized void setBulletType(int bulletType) {
 		this.bulletType = bulletType;
 	}
 

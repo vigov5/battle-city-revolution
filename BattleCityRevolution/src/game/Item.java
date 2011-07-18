@@ -10,8 +10,8 @@ public class Item extends Sprite {
 	 * TODO implement Shovel, bomb function
 	 */
 
-	public final int BIG_BULLET = 0;
-	public final int MISSILE_BULLET = 1;
+	public final int MISSILE_BULLET = 0;
+	public final int BIG_BULLET = 1;
 	public final int LIVE = 2;
 	public final int SHOVEL = 3;
 	public final int WRECH = 4;
@@ -23,23 +23,16 @@ public class Item extends Sprite {
 	public Item(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
-		this.setFrameStrip(new int[] { 0, 1, 2, 3, 4, 5, 6 });
-	}
-
-	public void applyEffect() {
-		switch (type) {
-		case CLOCK:
-			break;
-		case SHOVEL:
-			break;
-		}
+		this.setFrameStrip(new int[] { 0, 1, 2, 3, 4, 5, 6, 7});
 	}
 
 	public void applyEffect(Tank a) {
-		switch (type) {
+		switch (this.type) {
 		case BIG_BULLET:
+			a.setBulletType(Bullet.BIG_BULLET);
+			break;
 		case MISSILE_BULLET:
-			a.setBulletType(type - 1);
+			a.setBulletType(Bullet.MISSILE_BULLET);
 			break;
 		case WRECH:
 			if (a.getCurrentHealth() + 50 >= a.totalHealth) {
@@ -78,7 +71,7 @@ public class Item extends Sprite {
 			t.schedule(new ToDoTank(this, a), 10000);
 			break;
 		case LIVE:
-			System.out.println("Add one live");
+			if (a instanceof PlayerTank) ((PlayerTank) a).setLives(((PlayerTank) a).getLives() + 1);
 			break;
 		case BOMB:
 			if (a instanceof PlayerTank) {
@@ -88,6 +81,33 @@ public class Item extends Sprite {
 					}
 				}
 			}
+			break;
+		}
+	}
+	
+	public void setPositionAndBound(int x, int y){
+		this.x  = x;
+		this.y = y;
+		switch (this.type){
+		case BIG_BULLET:
+			this.setBound(13, 13, 6, 6);
+			break;
+		case MISSILE_BULLET:
+			this.setBound(12, 5, 9, 24);
+			break;
+		case LIVE:
+			this.setBound(9, 8, 15, 18);
+			break;
+		case THUNDER_BOOST:
+			this.setBound(5, 0, 24, 32);
+		case CLOCK:
+			this.setBound(4, 6, 24, 23);
+		case BOMB:
+			this.setBound(5, 2, 22, 27);
+			break;
+		case WRECH:
+		case SHOVEL:
+			this.setBound(0, 0, 32, 32);
 			break;
 		}
 	}

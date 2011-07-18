@@ -8,23 +8,24 @@ import javax.imageio.ImageIO;
 
 public class Tools {
 	
-	public static BufferedImage tankOneImage = null;
+	public static BufferedImage playerTankImage = null;
 	public static BufferedImage bulletImage = null;
 	private static BufferedImage tileImage = null;
 	private static BufferedImage explosionImage = null;
-	private static BufferedImage tankTwoImage;
+	private static BufferedImage aiTankImage;
 	private MainCanvas mc;
 	private BufferedImage itemImage;
+	private BufferedImage redTankImage;
 	
 	public Tools(MainCanvas mc){
 		this.mc = mc;
 	}
 	
-	public BufferedImage getTankOneImage() throws IOException {
-		if (tankOneImage == null){
-			tankOneImage = ImageIO.read(new File("Resources/Sprites/tank1.png"));
+	public BufferedImage getPlayerTankImage() throws IOException {
+		if (playerTankImage == null){
+			playerTankImage = ImageIO.read(new File("Resources/Sprites/playertank.png"));
 		}
-		return tankOneImage;
+		return playerTankImage;
 	}
 
 	public BufferedImage getBulletImage() throws IOException {
@@ -41,11 +42,11 @@ public class Tools {
 		return tileImage;
 	}
 	
-	public BufferedImage getTankTwoImage() throws IOException {
-		if (tankTwoImage == null){
-			tankTwoImage = ImageIO.read(new File("Resources/Sprites/tank2.png"));
+	public BufferedImage getAITankImage() throws IOException {
+		if (aiTankImage == null){
+			aiTankImage = ImageIO.read(new File("Resources/Sprites/aitank.png"));
 		}
-		return tankTwoImage;
+		return aiTankImage;
 	}
 	
 	public BufferedImage getExplosionImage() throws IOException {
@@ -60,6 +61,13 @@ public class Tools {
 			itemImage = ImageIO.read(new File("Resources/Sprites/items.png"));
 		}
 		return itemImage;
+	}
+	
+	public BufferedImage getRedTankImage() throws IOException {
+		if (redTankImage  == null){
+			redTankImage = ImageIO.read(new File("Resources/Sprites/redtank.png"));
+		}
+		return redTankImage;
 	}
 	
 	public boolean isCollision(Sprite a, Sprite b){
@@ -82,6 +90,13 @@ public class Tools {
 		return true;
 		}
 		return false; 
+	}
+	
+	public boolean isInBound(Sprite a, int x, int y, int width, int height){
+		if (a.getX() + a.getWidth() < x || a.getX() > x + width || a.getY() + a.getHeight() < y || a.getY() > y + height){
+			return false;
+		}
+		return true;
 	}
 }
 
