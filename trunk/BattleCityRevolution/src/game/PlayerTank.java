@@ -83,6 +83,7 @@ public class PlayerTank extends Tank {
 				}
 			}
 		}
+		checkCollisonWithItem();
 	}
 
 	private void respawnd() {
@@ -129,6 +130,10 @@ public class PlayerTank extends Tank {
 		rf.Close();
 	}
 
+	public void setLives(int value){
+		this.lives = value;
+	}
+	
 	public int getLives() {
 		// TODO Auto-generated method stub
 		return this.lives;

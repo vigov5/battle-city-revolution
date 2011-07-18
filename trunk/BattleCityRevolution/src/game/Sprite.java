@@ -67,7 +67,7 @@ public class Sprite {
 		return this.currentFrame;
 	}
 	
-	public synchronized void setPositionAndBound(int x, int y){
+	public void setPositionAndBound(int x, int y){
 		this.x = x;
 		this.y = y;
 		this.setBound(0, 0, frameWidth, frameHeight);

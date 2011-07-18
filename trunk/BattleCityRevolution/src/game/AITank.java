@@ -12,10 +12,12 @@ public class AITank extends Tank {
 	private boolean keepDoing = false;
 
 	private boolean frezzed = false;
-	
+	public static final int RED_TANK = 0;
+	public static final int BLUE_TANK = 1;
 	int level = 1;
+	private int type;
 
-	public AITank(BufferedImage image, int frameHeight, int frameWidth) {
+	public AITank(BufferedImage image, int frameHeight, int frameWidth, int type) {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
 		rnd = new Random(new Date().getTime());
@@ -23,6 +25,7 @@ public class AITank extends Tank {
 		this.bulletDelayTime = 300;
 		this.setTotalHealth(100);
 		this.currentHealth = this.totalHealth;
+		this.type = type;
 	}
 
 	public void think() {
@@ -101,5 +104,9 @@ public class AITank extends Tank {
 	
 	public void setFrezzed(boolean value){
 		this.frezzed = value;
+	}
+	
+	public int getType() {
+		return this.type;
 	}
 }

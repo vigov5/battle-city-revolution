@@ -19,7 +19,6 @@ public class Bullet extends Sprite {
 		this.setCurrentDirection(parent.getCurrentDirection());
 		this.parent = parent;
 		this.setPositionAndBound(parent.getX(), parent.getY());
-		this.setCurrentDirection(parent.getCurrentDirection());
 	}
 	
 	public int getDamage(){
@@ -27,7 +26,7 @@ public class Bullet extends Sprite {
 		case SMALL_BULLET:
 			return 25;
 		case BIG_BULLET:
-			return 30;
+			return 35;
 		case MISSILE_BULLET:
 			return 50;
 		}
@@ -46,7 +45,7 @@ public class Bullet extends Sprite {
 	public void render(Graphics g) {
 		if (!this.destroyed) {
 			super.render(g);
-			this.drawBound(g);
+			//this.drawBound(g);
 		}
 	}
 	

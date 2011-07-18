@@ -20,19 +20,21 @@ public class TileManager {
 
 	private static Brick[] brickArray = new Brick[425];
 	private int totalBrick = 0;
-	private Sprite goldenEagle;
+	private Sprite goldenBird;
 	private BufferedImage background;
-	public int goldenEagleRow = 0;
-	public int goldenEagleCol = 0;
 
-	public TileManager(String mapFile) throws IOException {
+	public TileManager() throws IOException{
 		background = MainCanvas.t.getTileImage().getSubimage(64, 32, 32, 32);
 		
-		goldenEagle = new Sprite(MainCanvas.t.getTileImage().getSubimage(0, 96, 64, 32), 32, 32);
-		goldenEagle.setFrameStrip(new int[]{0, 1});
+		goldenBird = new Sprite(MainCanvas.t.getTileImage().getSubimage(0, 96, 64, 32), 32, 32);
+		goldenBird.setFrameStrip(new int[]{0, 1});
 		
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 425; i++)
 			brickArray[i] = null;
+	}
+	
+	public void loadMap(int level){
+		String mapFile = "Resources/Maps/0" + String.valueOf(level) + ".map";
 		readMap(mapFile);
 	}
 
@@ -44,17 +46,14 @@ public class TileManager {
 					int c = in.read();
 					// System.out.println("c  = " + c);
 					if (Brick.isBrick(c)) {
-						Brick tmp = new Brick(MainCanvas.t
+						brickArray[totalBrick] = new Brick(MainCanvas.t
 								.getTileImage(), 32, 32, totalBrick, Brick.getBrickType(c));
-						brickArray[totalBrick].setPositionAndBound(j * 32, i * 32);
-						tmp.setRowAndCol(i, j);
-						brickArray[totalBrick] = tmp; 
+						brickArray[totalBrick].setPositionAndBound(j * 32,
+								i * 32);
 						totalBrick++;
 					} else if (c == 24) {
 						// Golden Bird
-						goldenEagle.setPositionAndBound(j*32, i*32);
-						goldenEagleCol = j;
-						goldenEagleRow = i;
+						goldenBird.setPositionAndBound(j*32, i*32);
 					}
 				}
 			}
@@ -76,7 +75,7 @@ public class TileManager {
 		for (int i = 0; i < totalBrick; i++)
 			if (brickArray[i] != null)
 				brickArray[i].render(g);
-		goldenEagle.render(g);
+		goldenBird.render(g);
 	}
 
 	public Brick[] getBrickArray() {
@@ -92,11 +91,16 @@ public class TileManager {
 		TileManager.brickArray[index] = null;
 	}
 	
+	public void cleanAllBricks(){
+		for (int i=0; i<425; i++){
+			brickArray[i] = null;
+		}
+	}
+	
 	public boolean isCollisionWithBricks(Sprite a) {
 		for (int i = 0; i < MainCanvas.tm.getTotalBrick(); i++) {
-			if (MainCanvas.tm.getBrickArray()[i] != null
-					&& MainCanvas.t.isCollision(a, MainCanvas.tm
-							.getBrickArray()[i])) {
+			if (brickArray[i] != null
+					&& MainCanvas.t.isCollision(a, brickArray[i])) {
 				if (a instanceof Tank) return true;
 			}
 		}
@@ -104,10 +108,10 @@ public class TileManager {
 	}
 
 	public Sprite getGoldenBird() {
-		return goldenEagle;
+		return goldenBird;
 	}
 
 	public void setGoldenBird(Sprite goldenBird) {
-		this.goldenEagle = goldenBird;
+		this.goldenBird = goldenBird;
 	}
 }
