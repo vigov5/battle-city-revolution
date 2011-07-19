@@ -36,7 +36,7 @@ public class WindowFrame extends JFrame{
 				// TODO Auto-generated method stub
 				remove(fp);
 				try {
-					maincanvas = new MainCanvas();
+					createMainCanvas();
 				} catch (Exception e){}
 				addMaincanvas();
 				repaint();
@@ -50,6 +50,11 @@ public class WindowFrame extends JFrame{
 		setLocationRelativeTo(null);
 	}
 	
+	protected void createMainCanvas() {
+		// TODO Auto-generated method stub
+		maincanvas = new MainCanvas(this);
+	}
+
 	private void addMaincanvas(){
 		add(maincanvas, BorderLayout.CENTER);
 		maincanvas.setFocusable(true);
@@ -61,5 +66,12 @@ public class WindowFrame extends JFrame{
 		d = fp.getPreferredSize();
 		fp.setBounds(i.left,i.top,d.width,d.height);
 		add(fp);
+	}
+
+	public void callBackFunction() {
+		// TODO Auto-generated method stub
+		this.remove(maincanvas);
+		addFramePanel();
+		repaint();
 	}
 }

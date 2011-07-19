@@ -90,6 +90,7 @@ public class PlayerTank extends Tank {
 		// TODO Auto-generated method stub
 		this.setPositionAndBound(10 * 32, 16 * 32);
 		this.currentHealth = this.totalHealth;
+		this.setBulletType(Bullet.SMALL_BULLET);
 		this.setDestroyed(false);
 	}
 
