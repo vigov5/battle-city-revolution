@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Brick extends Sprite {
@@ -25,7 +26,7 @@ public class Brick extends Sprite {
 			int index, int type) {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
-		this.type = type;
+		this.setType(type);
 		this.setFrameStrip(bricksFrameStrip[type]);
 		this.setFrame(this.frameStrip[0]);
 		this.index = index;
@@ -42,6 +43,7 @@ public class Brick extends Sprite {
 	}
 
 	public void update() {
+		this.setFrameStrip(bricksFrameStrip[this.type]);
 		if (this.currentHealth > 75) {
 			this.setFrame(this.frameStrip[0]);
 		} else if (this.currentHealth > 50) {

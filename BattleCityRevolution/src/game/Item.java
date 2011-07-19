@@ -23,7 +23,7 @@ public class Item extends Sprite {
 	public Item(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
 		// TODO Auto-generated constructor stub
-		this.setFrameStrip(new int[] { 0, 1, 2, 3, 4, 5, 6, 7});
+		this.setFrameStrip(new int[] { 0, 1, 2, 3, 4, 5, 6, 7 });
 	}
 
 	public void applyEffect(Tank a) {
@@ -41,22 +41,32 @@ public class Item extends Sprite {
 				a.setCurrentHealth(a.getCurrentHealth() + 50);
 			break;
 		case SHOVEL:
+			Timer t = new Timer();
+			t.schedule(new ToDoTank(this, a), 10000);
 			if (a instanceof PlayerTank) {
-				/*
 				int row = MainCanvas.tm.goldenEagleRow;
 				int col = MainCanvas.tm.goldenEagleCol;
-				for (int i=0; i<MainCanvas.tm.getTotalBrick(); i++){
-					Brick tmp = MainCanvas.tm.getBrickArray()[i];
-					if (tmp.row == MainCanvas.tm.goldenEagleRow + 1){
-							
+				System.out.println("row = " + row + "col = " + col);
+				for (int i = 0; i < MainCanvas.tm.getTotalBrick(); i++) {
+					if (MainCanvas.tm.getBrickArray()[i] != null) {
+						Brick tmp = MainCanvas.tm.getBrickArray()[i];
+						if (tmp.row == row
+								&& ((tmp.col == col - 1) || (tmp.col == col + 1))) {
+							System.out.println("brick: row = " + tmp.row + "col = " + tmp.col);
+							MainCanvas.tm.getBrickArray()[i].setType(Brick.WHITE_ROCK);
+						}
+						if (tmp.row == row - 1 && tmp.col >= col - 1
+								&& tmp.col <= col + 1) {
+							MainCanvas.tm.getBrickArray()[i].setType(Brick.WHITE_ROCK);
+							System.out.println("brick: row = " + tmp.row + "col = " + tmp.col);
+						}
 					}
 				}
-				*/
 			}
 			break;
 		case THUNDER_BOOST:
 			a.setSpeedStep(4);
-			Timer t = new Timer();
+			t = new Timer();
 			t.schedule(new ToDoTank(this, a), 10000);
 			break;
 		case CLOCK:
@@ -71,7 +81,8 @@ public class Item extends Sprite {
 			t.schedule(new ToDoTank(this, a), 10000);
 			break;
 		case LIVE:
-			if (a instanceof PlayerTank) ((PlayerTank) a).setLives(((PlayerTank) a).getLives() + 1);
+			if (a instanceof PlayerTank)
+				((PlayerTank) a).setLives(((PlayerTank) a).getLives() + 1);
 			break;
 		case BOMB:
 			if (a instanceof PlayerTank) {
@@ -84,11 +95,11 @@ public class Item extends Sprite {
 			break;
 		}
 	}
-	
-	public void setPositionAndBound(int x, int y){
-		this.x  = x;
+
+	public void setPositionAndBound(int x, int y) {
+		this.x = x;
 		this.y = y;
-		switch (this.type){
+		switch (this.type) {
 		case BIG_BULLET:
 			this.setBound(13, 13, 6, 6);
 			break;
@@ -145,6 +156,24 @@ public class Item extends Sprite {
 								.setFrezzed(false);
 					}
 				}
+				break;
+			case SHOVEL:
+				int row = MainCanvas.tm.goldenEagleRow;
+				int col = MainCanvas.tm.goldenEagleCol;
+				for (int i = 0; i < MainCanvas.tm.getTotalBrick(); i++) {
+					if (MainCanvas.tm.getBrickArray()[i] != null) {
+						Brick tmp = MainCanvas.tm.getBrickArray()[i];
+						if (tmp.row == row
+								&& ((tmp.col == col - 1) || (tmp.col == col + 1))) {
+							tmp.setType(Brick.RED_H_BRICK);
+						}
+						if (tmp.row == row - 1 && tmp.col >= col - 1
+								&& tmp.col <= col + 1) {
+							tmp.setType(Brick.RED_H_BRICK);
+						}
+					}
+				}
+				break;
 			}
 		}
 	}

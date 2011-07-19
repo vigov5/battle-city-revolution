@@ -79,7 +79,6 @@ public class Bullet extends Sprite {
 							.getBrickArray()[i]) && MainCanvas.tm.getBrickArray()[i].getType() != Brick.SEA) {
 				hit = true;
 				MainCanvas.tm.getBrickArray()[i].computeDamage(this.getDamage(), this);
-				MainCanvas.tm.getBrickArray()[i].update();
 			}
 		}
 		if (hit) this.makeExplosion();
