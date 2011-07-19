@@ -58,6 +58,7 @@ public class AITank extends Tank {
 					this.fire();
 				}
 			}
+			
 		}
 		else RandomAction();
 	}
