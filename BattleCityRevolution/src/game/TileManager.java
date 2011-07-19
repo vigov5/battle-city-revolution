@@ -95,6 +95,7 @@ public class TileManager {
 		for (int i=0; i<425; i++){
 			brickArray[i] = null;
 		}
+		totalBrick = 0;
 	}
 	
 	public boolean isCollisionWithBricks(Sprite a) {
