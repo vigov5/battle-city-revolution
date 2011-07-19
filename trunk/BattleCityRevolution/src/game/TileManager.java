@@ -34,7 +34,7 @@ public class TileManager {
 	}
 	
 	public void loadMap(int level){
-		String mapFile = "Resources/Maps/0" + String.valueOf(level) + ".map";
+		String mapFile = "Resources/Maps/" + String.valueOf(level) + ".map";
 		readMap(mapFile);
 	}
 
@@ -96,6 +96,7 @@ public class TileManager {
 			brickArray[i] = null;
 		}
 		totalBrick = 0;
+		this.goldenBird.setFrame(0);
 	}
 	
 	public boolean isCollisionWithBricks(Sprite a) {
