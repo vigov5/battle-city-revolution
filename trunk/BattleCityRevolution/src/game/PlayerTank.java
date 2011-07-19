@@ -59,7 +59,9 @@ public class PlayerTank extends Tank {
 		super.update();
 		if (this.isDestroyed()) {
 			this.lives--;
-			this.respawnd();
+			if (this.lives == 0){
+				MainCanvas.setGameOver(true);
+			} else this.respawnd();
 		} else {
 			int count = 0;
 			for (int i = 0; i < this.keyPressedState.length; i++) {

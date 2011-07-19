@@ -64,7 +64,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		this.frame = frame;
 		try {
 			tm = new TileManager();
-			ps = new PlaySound();
+			//ps = new PlaySound();
 			// init tank, item and explosion array
 			explosionArray = new ArrayList<Explosion>(20);
 			explosionArray.clear();
@@ -82,6 +82,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			tankArray.add(0, playerTank);
 
 			initLevel(currentLevel);
+			MainCanvas.setGameOver(false);
 
 			this.setRunning(false);
 			thread = new Thread(this);
@@ -97,7 +98,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	public void initLevel(int level) {
 		tm.loadMap(level);
-		ps.PlayBeginningSound();
+		//ps.PlayBeginningSound();
 		this.spawnAITanks();
 	}
 
@@ -122,7 +123,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		Item tmp;
 		try {
 			tmp = new Item(MainCanvas.t.getItemImage(), 32, 32);
-			tmp.setType(rnd.nextInt(7));
+			tmp.setType(rnd.nextInt(8));
 			tmp.setPositionAndBound(x, y);
 			itemArray.add(tmp);
 			tmp = null;
@@ -151,7 +152,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 						currentTotalAITank++;
 						try {
 							AITank tmp;
-							if (currentTotalAITank % 4 == 0) {
+							if (currentTotalAITank % 1 == 0) {
 								tmp = new AITank(t.getRedTankImage(), 32, 32,
 										AITank.RED_TANK);
 							} else
@@ -193,44 +194,50 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			if (animationClock == 2147483647) {
 				animationClock = 0;
 			}
-			if (isAllAITankDestroyed()) {
+			if (isAllAITankDestroyed() && !isGameOver()) {
 				currentLevel++;
 				changeLevel(currentLevel);
 			}
 
-			if (!isPaused()) {
-				// Update tank state
-				for (int i = 0; i < tankArray.size(); i++) {
-					Tank tmp = tankArray.get(i);
-					if (tmp instanceof AITank)
-						((game.AITank) tmp).think();
-					tmp.update();
-					if (tmp instanceof AITank && tmp.isDestroyed) {
-						if (((AITank) tmp).getType() == AITank.RED_TANK) {
-							this.spawnItem(tmp.getX(), tmp.getY());
+			if (!isGameOver()){
+				if (!isPaused()) {
+					// Update tank state
+					for (int i = 0; i < tankArray.size(); i++) {
+						Tank tmp = tankArray.get(i);
+						if (tmp instanceof AITank)
+							((game.AITank) tmp).think();
+						tmp.update();
+						if (tmp instanceof AITank && tmp.isDestroyed) {
+							if (((AITank) tmp).getType() == AITank.RED_TANK) {
+								this.spawnItem(tmp.getX(), tmp.getY());
+							}
+							tankArray.remove(tmp);
+							tmp = null;
 						}
-						tankArray.remove(tmp);
-						tmp = null;
 					}
-				}
-
-				// update item
-				for (int i = 0; i < itemArray.size(); i++) {
-					if (itemArray.get(i).isDestroyed()) {
-						itemArray.remove(i);
+	
+					// update item
+					for (int i = 0; i < itemArray.size(); i++) {
+						if (itemArray.get(i).isDestroyed()) {
+							itemArray.remove(i);
+						}
 					}
-				}
-
-				// Update explosion array
-				if (!explosionArray.isEmpty()) {
-					for (int i = 0; i < explosionArray.size(); i++) {
-						explosionArray.get(i).update();
-						if (explosionArray.get(i).isDestroyed())
-							explosionArray.remove(i);
+	
+					// Update explosion array
+					if (!explosionArray.isEmpty()) {
+						for (int i = 0; i < explosionArray.size(); i++) {
+							explosionArray.get(i).update();
+							if (explosionArray.get(i).isDestroyed())
+								explosionArray.remove(i);
+						}
 					}
+					// Update 
+					tm.update();
+				} else {
+					this.frame.callBackFunction();
 				}
 			} else {
-				this.frame.callBackFunction();
+				cleanUpMap();
 			}
 			// Repaint
 			repaint();
@@ -246,9 +253,9 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		tm.render(g);
 
 		if (!isGameOver()) {
+			tm.render(g);
 			// render tanks
 			for (int i = 0; i < tankArray.size(); i++) {
 				tankArray.get(i).render(g);
@@ -269,9 +276,10 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			// render right menu
 			drawRightMenu(g);
 		} else {
+			g.setColor(Color.WHITE);
 			Font f = new Font("Courier New", Font.BOLD, 48);
 			g.setFont(f);
-			g.drawString("GAME OVER", SCREEN_WIDTH, SCREEN_HEIGHT / 2);
+			g.drawString("GAME OVER", SCREEN_WIDTH/2, SCREEN_HEIGHT / 2);
 		}
 	}
 
@@ -312,6 +320,9 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (isGameOver()){
+			//this.frame.callBackFunctionWhenGameOver();
+		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
 			setPaused(true);
 		}

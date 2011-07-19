@@ -22,6 +22,8 @@ public class TileManager {
 	private int totalBrick = 0;
 	private Sprite goldenBird;
 	private BufferedImage background;
+	public int goldenEagleRow;
+	public int goldenEagleCol;
 
 	public TileManager() throws IOException{
 		background = MainCanvas.t.getTileImage().getSubimage(64, 32, 32, 32);
@@ -37,6 +39,12 @@ public class TileManager {
 		String mapFile = "Resources/Maps/" + String.valueOf(level) + ".map";
 		readMap(mapFile);
 	}
+	
+	public void update(){
+		for (int i = 0; i < totalBrick; i++){
+			if (brickArray[i] != null) brickArray[i].update();
+		}
+	}
 
 	public void readMap(String mapName) {
 		try {
@@ -46,14 +54,19 @@ public class TileManager {
 					int c = in.read();
 					// System.out.println("c  = " + c);
 					if (Brick.isBrick(c)) {
-						brickArray[totalBrick] = new Brick(MainCanvas.t
+						Brick tmp = new Brick(MainCanvas.t
 								.getTileImage(), 32, 32, totalBrick, Brick.getBrickType(c));
+						tmp.setRowAndCol(i, j);
+						brickArray[totalBrick] = tmp;
 						brickArray[totalBrick].setPositionAndBound(j * 32,
 								i * 32);
+						tmp = null;
 						totalBrick++;
 					} else if (c == 24) {
 						// Golden Bird
 						goldenBird.setPositionAndBound(j*32, i*32);
+						this.goldenEagleRow = i;
+						this.goldenEagleCol = j;
 					}
 				}
 			}
