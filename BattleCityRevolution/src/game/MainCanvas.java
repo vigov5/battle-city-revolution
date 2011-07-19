@@ -78,6 +78,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			playerTank.setPositionAndBound(10 * 32, 16 * 32);
 			// player tank is alway at first place of tank array
 			playerTank.setTotalHealth(150);
+			playerTank.setCurrentHealth(playerTank.totalHealth);
 			tankArray.add(0, playerTank);
 
 			initLevel(currentLevel);
