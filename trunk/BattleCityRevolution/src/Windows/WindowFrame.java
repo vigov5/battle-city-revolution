@@ -86,6 +86,8 @@ public class WindowFrame extends JFrame{
 		// TODO Auto-generated method stub
 		maincanvas.setPaused(true);
 		this.remove(maincanvas);
+		maincanvas.setFocusable(false);
+		maincanvas.setRequestFocusEnabled(false);
 		addFramePanel();
 		EnableResume();
 		setBackground(Color.WHITE);
