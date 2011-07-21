@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 public class WindowFrame extends JFrame{
 	
 	FramePanel fp = new FramePanel();
-	MainCanvas maincanvas;
+	MainCanvas maincanvas = null;
 	JButton newgame;
 	JButton resume;
 	Dimension d;
@@ -26,10 +26,7 @@ public class WindowFrame extends JFrame{
 		newgame = fp.getNewGameButton();
 		resume = fp.getResumeButton();
 		add(fp, BorderLayout.CENTER);
-		try {
-			createMainCanvas();	
-		} catch (Exception e){}
-		
+
 		resume.addActionListener(new ActionListener() {
 			
 			@Override
@@ -48,6 +45,13 @@ public class WindowFrame extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				remove(fp);
+				if (maincanvas != null){
+					maincanvas.setEndGame(true);
+					maincanvas.cleanUpEveryThing();
+				}
+				try {
+					createMainCanvas();	
+				} catch (Exception e){}
 				maincanvas.GetNewSetting();
 				addMaincanvas();
 				repaint();
@@ -78,9 +82,9 @@ public class WindowFrame extends JFrame{
 		add(fp,BorderLayout.CENTER);
 	}
 
-	public void callBackFunction() {
+	public void callBackFunctionWhenPaused() {
 		// TODO Auto-generated method stub
-		//maincanvas.setPaused(true);
+		maincanvas.setPaused(true);
 		this.remove(maincanvas);
 		addFramePanel();
 		EnableResume();
