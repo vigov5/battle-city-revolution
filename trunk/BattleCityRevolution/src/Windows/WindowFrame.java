@@ -36,6 +36,7 @@ public class WindowFrame extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				remove(fp);
+				if (maincanvas.GetSoundOption()) System.out.println("OK");
 				addMaincanvas();
 				repaint();
 			}

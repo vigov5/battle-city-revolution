@@ -122,7 +122,7 @@ public class PlayerTank extends Tank {
 		}
 	}
 
-	private void getKey() {
+	public void getKey() {
 		ReadFile rf = new ReadFile("Resources/Key.bcr");
 		keyleft = Integer.parseInt(rf.ReadOneLine());
 		keyright = Integer.parseInt(rf.ReadOneLine());
