@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,9 +14,9 @@ import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
-import Windows.WindowFrame;
-
 import Function.PlaySound;
+import Function.ReadFile;
+import Windows.WindowFrame;
 
 public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
@@ -36,6 +34,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public static ArrayList<Explosion> explosionArray;
 	public static ArrayList<Tank> tankArray;
 	public static ArrayList<Item> itemArray;
+	public boolean soundstate;
 	public final int SCREEN_WIDTH = 1000;
 	public final int SCREEN_HEIGHT = 544;
 	public int totalAITank = 20;
@@ -80,7 +79,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			playerTank.setTotalHealth(150);
 			playerTank.setCurrentHealth(playerTank.totalHealth);
 			tankArray.add(0, playerTank);
-
+			
+			GetSoundOption();
 			initLevel(currentLevel);
 			MainCanvas.setGameOver(false);
 
@@ -98,7 +98,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	public void initLevel(int level) {
 		tm.loadMap(level);
-		ps.PlayBeginningSound();
+		if (soundstate)
+			ps.PlayBeginningSound();
 		this.spawnAITanks();
 	}
 
@@ -350,6 +351,25 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean GetSoundOption(){
+		ReadFile rf = new ReadFile("Resources/Setting.bcr");
+		String s;
+		while((s=rf.ReadOneLine())!=null){
+			if (s.indexOf("Sound")>-1){
+				if (s.indexOf("OFF")>-1) soundstate = false;
+				else soundstate = true;
+			}
+			else soundstate = true;
+		}
+		return soundstate;
+	}
+	
+	public void GetNewSetting(){
+		playerTank.getKey();
+		GetSoundOption();
+		
 	}
 
 	public void setRunning(boolean running) {
