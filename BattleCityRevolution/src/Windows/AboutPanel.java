@@ -2,6 +2,7 @@ package Windows;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Insets;
@@ -20,6 +21,12 @@ public class AboutPanel extends JPanel {
 	
 	private LinkedList listbutton = new LinkedList();
 	private Image bg;
+	String des1 = "Childhood Rediscovering Group (CRG) is a group at the Subject named Object Oriented Programming at SFC-KEIO.";
+	String des2 = "CRG has 4 members ";
+	String des3 = "グエン・アイン・ティエン";
+	String des4 = "チャン・ドゥック・タン";
+	String des5 = "鈴木梅雨";
+	String des6 = "ひろき";
 	
 	public AboutPanel(){
 		setLayout(null);
@@ -38,7 +45,23 @@ public class AboutPanel extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 	    g.drawImage(bg, 100, 0, null);
+	    drawdescription(g);
 	  }
+	
+	public void drawdescription (Graphics g){
+		int i = 0;
+		g.setFont(new Font("Serif",Font.BOLD,17));
+		g.setColor(Color.BLUE);
+		g.drawString(des1.substring(0,62), 180, 140 + (i++)*20);
+		g.drawString(des1.substring(62,des1.length()), 180, 140 + (i++)*20);
+		g.drawString(des2, 330, 160 + (i++)*20);
+		g.setFont(new Font("MS Mincho",Font.BOLD,17));
+		g.setColor(Color.RED);
+		g.drawString(des3, 320, 150 + (i++)*30);
+		g.drawString(des4, 320, 150 + (i++)*30);
+		g.drawString(des5, 320, 150 + (i++)*30);
+		g.drawString(des6, 320, 150 + (i++)*30);
+	}
 	
 	public LinkedList GetListButton(){
 		return listbutton;

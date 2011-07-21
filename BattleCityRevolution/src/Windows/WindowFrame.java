@@ -48,6 +48,7 @@ public class WindowFrame extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				remove(fp);
+				maincanvas.GetNewSetting();
 				addMaincanvas();
 				repaint();
 			}
