@@ -15,7 +15,7 @@ public class Tank extends Sprite {
 	protected int totalHealth;
 	protected int currentHealth;
 	private boolean isRunning = false;
-	private int speedStep = 2;
+	protected int speedStep = 2;
 	private final int MAX_BULLET = 100;
 	private ArrayList<Bullet> bulletArray;
 	protected int bulletType;
@@ -300,6 +300,14 @@ public class Tank extends Sprite {
 
 	public void setCurrentHealth(int currentHealth) {
 		this.currentHealth = currentHealth;
+	}
+
+	public ArrayList<Bullet> getBulletArray() {
+		return bulletArray;
+	}
+
+	public void setBulletArray(ArrayList<Bullet> bulletArray) {
+		this.bulletArray = bulletArray;
 	}
 	
 	

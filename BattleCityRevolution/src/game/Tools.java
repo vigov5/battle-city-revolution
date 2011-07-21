@@ -93,7 +93,7 @@ public class Tools {
 	}
 	
 	public boolean isInBound(Sprite a, int x, int y, int width, int height){
-		if (a.getX() + a.getWidth() < x || a.getX() > x + width || a.getY() + a.getHeight() < y || a.getY() > y + height){
+		if (a.getBoundX() + a.getBoundWidth() < x || a.getBoundX() > x + width || a.getBoundY() + a.getHeight() < y || a.getBoundY() > y + height){
 			return false;
 		}
 		return true;

@@ -7,10 +7,6 @@ import Function.ReadFile;
 
 public class PlayerTank extends Tank {
 
-	/*
-	 * TODO add lives function
-	 */
-
 	int keyleft;
 	int keyright;
 	int keyup;
@@ -24,7 +20,6 @@ public class PlayerTank extends Tank {
 
 	public PlayerTank(BufferedImage image, int frameHeight, int frameWidth) {
 		super(image, frameHeight, frameWidth);
-		// TODO Auto-generated constructor stub
 		this.setTotalHealth(100);
 		this.currentHealth = this.totalHealth;
 		this.lives = 3;
@@ -89,10 +84,10 @@ public class PlayerTank extends Tank {
 	}
 
 	private void respawnd() {
-		// TODO Auto-generated method stub
 		this.setPositionAndBound(10 * 32, 16 * 32);
 		this.currentHealth = this.totalHealth;
 		this.setBulletType(Bullet.SMALL_BULLET);
+		this.speedStep = 2;
 		this.setDestroyed(false);
 	}
 
@@ -138,7 +133,6 @@ public class PlayerTank extends Tank {
 	}
 	
 	public int getLives() {
-		// TODO Auto-generated method stub
 		return this.lives;
 	}
 

@@ -25,7 +25,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	 */
 
 	private static final long serialVersionUID = 1270488992849705712L;
-	private int currentLevel = 1;
+	public static int currentLevel = 1;
 	private long sleepTime = 20;
 	private PlayerTank playerTank;
 	public static int animationClock = 0;
@@ -47,6 +47,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	PlaySound ps;
 	Thread thread;
 	private WindowFrame frame;
+	private boolean endGame;
 
 	public static boolean isGameOver() {
 		return gameOver;
@@ -57,6 +58,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	}
 
 	public MainCanvas(WindowFrame frame) {
+		this.setEndGame(false);
 		rnd = new Random(serialVersionUID);
 		this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		t = new Tools(this);
@@ -79,7 +81,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			playerTank.setTotalHealth(150);
 			playerTank.setCurrentHealth(playerTank.totalHealth);
 			tankArray.add(0, playerTank);
-			
+
 			GetSoundOption();
 			initLevel(currentLevel);
 			MainCanvas.setGameOver(false);
@@ -93,7 +95,6 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		repaint();
 	}
 
 	public void initLevel(int level) {
@@ -105,6 +106,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	public void cleanUpMap() {
 		for (int i = tankArray.size() - 1; i > 0; i--) {
+			tankArray.get(i).getBulletArray().clear();
 			tankArray.remove(i);
 		}
 		explosionArray.clear();
@@ -141,42 +143,48 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				if (currentTotalAITank != totalAITank) {
-					if (MainCanvas.tankArray.size() - 1 < MAX_AITANK_ONSCREEN) {
-						int pos = -1;
-						do {
-							pos = rnd.nextInt(3);
-							if (isPlaceSpawnable(pos * 12)) {
-								pos *= 12;
+				if (!isGameOver()) {
+					if (currentTotalAITank != totalAITank) {
+						int last = -1;
+						if (MainCanvas.tankArray.size() - 1 < MAX_AITANK_ONSCREEN) {
+							int pos = -1;
+							do {
+								pos = rnd.nextInt(3) * 12;
+								if (isPlaceSpawnable(pos) && pos != last) {
+									System.out.println("Placeable ");
+									last = pos;
+								}
+							} while (pos == -1);
+							currentTotalAITank++;
+							try {
+								AITank tmp;
+								if (currentTotalAITank % 1 == 0) {
+									tmp = new AITank(t.getRedTankImage(), 32,
+											32, AITank.RED_TANK);
+								} else
+									tmp = new AITank(t.getAITankImage(), 32,
+											32, AITank.BLUE_TANK);
+								tmp.setPositionAndBound(pos * 32, 0);
+								tankArray.add(tmp);
+								tmp = null;
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
-						} while (pos == -1);
-						currentTotalAITank++;
-						try {
-							AITank tmp;
-							if (currentTotalAITank % 1 == 0) {
-								tmp = new AITank(t.getRedTankImage(), 32, 32,
-										AITank.RED_TANK);
-							} else
-								tmp = new AITank(t.getAITankImage(), 32, 32,
-										AITank.BLUE_TANK);
-							tmp.setPositionAndBound(pos * 32, 0);
-							tankArray.add(tmp);
-							tmp = null;
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
-					}
-				} else
+					} else
+						this.cancel();
+				} else {
 					this.cancel();
+				}
 			}
 		}, 0, 5000);
 	}
 
 	private boolean isPlaceSpawnable(int pos) {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < MainCanvas.tankArray.size(); i++) {
-			if (MainCanvas.t.isInBound(tankArray.get(i), pos * 32, 0, 96, 96)) {
+		for (int i = 1; i < MainCanvas.tankArray.size(); i++) {
+			if (MainCanvas.t.isInBound(tankArray.get(i), pos * 32, 0, 32, 32)) {
 				return false;
 			}
 		}
@@ -189,18 +197,20 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			Thread.sleep(1500);
 		} catch (Exception e) {
 		}
-		while (true) {
+		while (!isEndGame()) {
 			animationClock++;
 			if (animationClock == 2147483647) {
 				animationClock = 0;
 			}
-			if (isAllAITankDestroyed() && !isGameOver()) {
-				currentLevel++;
-				changeLevel(currentLevel);
-			}
 
-			if (!isGameOver()){
+			if (!isGameOver()) {
 				if (!isPaused()) {
+					if (isAllAITankDestroyed()
+							&& this.currentTotalAITank == this.totalAITank) {
+						currentLevel++;
+						changeLevel(currentLevel);
+					}
+
 					// Update tank state
 					for (int i = 0; i < tankArray.size(); i++) {
 						Tank tmp = tankArray.get(i);
@@ -215,14 +225,14 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 							tmp = null;
 						}
 					}
-	
+
 					// update item
 					for (int i = 0; i < itemArray.size(); i++) {
 						if (itemArray.get(i).isDestroyed()) {
 							itemArray.remove(i);
 						}
 					}
-	
+
 					// Update explosion array
 					if (!explosionArray.isEmpty()) {
 						for (int i = 0; i < explosionArray.size(); i++) {
@@ -231,13 +241,13 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 								explosionArray.remove(i);
 						}
 					}
-					// Update 
+					// Update
 					tm.update();
 				} else {
-					this.frame.callBackFunction();
+					this.frame.callBackFunctionWhenPaused();
 				}
 			} else {
-				cleanUpMap();
+				cleanUpEveryThing();
 			}
 			// Repaint
 			repaint();
@@ -256,14 +266,14 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 		if (!isGameOver()) {
 			tm.render(g);
-			// render tanks
-			for (int i = 0; i < tankArray.size(); i++) {
-				tankArray.get(i).render(g);
-			}
-
 			// render items
 			for (int i = 0; i < itemArray.size(); i++) {
 				itemArray.get(i).render(g);
+			}
+			
+			// render tanks
+			for (int i = 0; i < tankArray.size(); i++) {
+				tankArray.get(i).render(g);
 			}
 
 			// render explosion effects
@@ -279,7 +289,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			g.setColor(Color.WHITE);
 			Font f = new Font("Courier New", Font.BOLD, 48);
 			g.setFont(f);
-			g.drawString("GAME OVER", SCREEN_WIDTH/2, SCREEN_HEIGHT / 2);
+			g.drawString("GAME OVER", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 		}
 	}
 
@@ -320,13 +330,15 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if (isGameOver() && e.getKeyCode() == KeyEvent.VK_ENTER){
+		if (isGameOver() && e.getKeyCode() == KeyEvent.VK_ENTER) {
 			this.frame.callBackFunctionWhenGameOver();
 		}
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			setPaused(true);
 		}
-		playerTank.keyPressedReact(e);
+		if (!isGameOver() && !isPaused()) {
+			playerTank.keyPressedReact(e);
+		}
 	}
 
 	@Override
@@ -352,24 +364,26 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			e.printStackTrace();
 		}
 	}
-	
-	public boolean GetSoundOption(){
+
+	public boolean GetSoundOption() {
 		ReadFile rf = new ReadFile("Resources/Setting.bcr");
 		String s;
-		while((s=rf.ReadOneLine())!=null){
-			if (s.indexOf("Sound")>-1){
-				if (s.indexOf("OFF")>-1) soundstate = false;
-				else soundstate = true;
-			}
-			else soundstate = true;
+		while ((s = rf.ReadOneLine()) != null) {
+			if (s.indexOf("Sound") > -1) {
+				if (s.indexOf("OFF") > -1)
+					soundstate = false;
+				else
+					soundstate = true;
+			} else
+				soundstate = true;
 		}
 		return soundstate;
 	}
-	
-	public void GetNewSetting(){
+
+	public void GetNewSetting() {
 		playerTank.getKey();
 		GetSoundOption();
-		
+
 	}
 
 	public void setRunning(boolean running) {
@@ -392,7 +406,23 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		return paused;
 	}
 
-	public void setPaused(boolean paused) {
+	public synchronized void setPaused(boolean paused) {
 		this.paused = paused;
+	}
+
+	public void cleanUpEveryThing() {
+		// TODO Auto-generated method stub
+		this.cleanUpMap();
+		MainCanvas.tankArray.clear();
+		playerTank = null;
+		ps = null;
+	}
+
+	public boolean isEndGame() {
+		return endGame;
+	}
+
+	public void setEndGame(boolean endGame) {
+		this.endGame = endGame;
 	}
 }
