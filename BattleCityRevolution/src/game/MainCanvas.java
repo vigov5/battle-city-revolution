@@ -319,8 +319,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if (isGameOver()){
-			//this.frame.callBackFunctionWhenGameOver();
+		if (isGameOver() && e.getKeyCode() == KeyEvent.VK_ENTER){
+			this.frame.callBackFunctionWhenGameOver();
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
 			setPaused(true);

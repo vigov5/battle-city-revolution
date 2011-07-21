@@ -138,7 +138,11 @@ public class FramePanel extends JPanel implements ActionListener{
 		repaint();
 	}
 	
-	public JButton getPlayButton(){
-		return mainpanel.getPlayButton();
+	public JButton getNewGameButton(){
+		return mainpanel.getNewGameButton();
+	}
+	
+	public JButton getResumeButton () {
+		return mainpanel.getResumeButton();
 	}
 }

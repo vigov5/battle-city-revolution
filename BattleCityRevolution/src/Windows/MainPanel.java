@@ -19,7 +19,12 @@ public class MainPanel extends JPanel {
 	
 	private LinkedList listbutton = new LinkedList();
 	private Image bg;
-	public ButtonCreater play;
+	ButtonCreater newgame;
+	ButtonCreater resume;
+	ButtonCreater option;
+	ButtonCreater help;
+	ButtonCreater about;
+	ButtonCreater quit;
 	
 	public MainPanel(){
 		setLayout(null);
@@ -30,24 +35,27 @@ public class MainPanel extends JPanel {
 		int x = i.left+225;
 		int y = i.top+80;
 		int count = 0;
-		play = new ButtonCreater("<html><b><font size = \"3\"> PLAY </font></b></html>",300,50,x+50,y+(count++)*60);
-		ButtonCreater option = new ButtonCreater("<html><b><font size = \"3\"> OPTION </font></b></html>",300,50,x+50,y+(count++)*60);
-		//ButtonCreater ranking = new ButtonCreater("<html><b><font size = \"3\"> RANKING </font></b></html>",300,40,x+50,y+(count++)*50);
-		ButtonCreater help = new ButtonCreater("<html><b><font size = \"3\"> HELP </font></b></html>",300,50,x+50,y+(count++)*60);
-		ButtonCreater about = new ButtonCreater("<html><b><font size = \"3\"> ABOUT </font></b></html>",300,50,x+50,y+(count++)*60);
-		ButtonCreater quit = new ButtonCreater("<html><b><font size = \"3\"> QUIT </font></b></html>",300,50,x+50,y+(count++)*60);
-		add(play);
-		add(option);
-		//add(ranking);
-		add(help);
-		add(about);
-		add(quit);
-		listbutton.add(play);
+		
+		resume = new ButtonCreater("<html><i><font size = \"3\"> RESUME </font></i></html>",300,40,x+50,y+(count++)*50);
+		resume.setForeground(Color.GRAY);
+		resume.setEnabled(false);
+		newgame = new ButtonCreater("<html><b><font size = \"3\"> NEW GAME </font></b></html>",300,40,x+50,y+(count++)*50);
+		option = new ButtonCreater("<html><b><font size = \"3\"> OPTION </font></b></html>",300,40,x+50,y+(count++)*50);
+		help = new ButtonCreater("<html><b><font size = \"3\"> HELP </font></b></html>",300,40,x+50,y+(count++)*50);
+		about = new ButtonCreater("<html><b><font size = \"3\"> ABOUT </font></b></html>",300,40,x+50,y+(count++)*50);
+		quit = new ButtonCreater("<html><b><font size = \"3\"> QUIT </font></b></html>",300,40,x+50,y+(count++)*50);
+		listbutton.add(newgame);
 		listbutton.add(option);
-		//listbutton.add(ranking);
+		listbutton.add(resume);
 		listbutton.add(help);
 		listbutton.add(about);
 		listbutton.add(quit);
+		add(newgame);
+		add(option);
+		add(resume);
+		add(help);
+		add(about);
+		add(quit);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -58,7 +66,11 @@ public class MainPanel extends JPanel {
 		return listbutton;
 	}
 	
-	public JButton getPlayButton(){
-		return play;
+	public JButton getNewGameButton(){
+		return newgame;
+	}
+	
+	public JButton getResumeButton(){
+		return resume;
 	}
 }
