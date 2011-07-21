@@ -245,6 +245,14 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 					tm.update();
 				} else {
 					this.frame.callBackFunctionWhenPaused();
+					while (isPaused()){
+						try {
+							Thread.sleep(sleepTime);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 			} else {
 				cleanUpEveryThing();
