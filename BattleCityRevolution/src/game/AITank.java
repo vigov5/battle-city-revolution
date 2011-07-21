@@ -16,6 +16,10 @@ public class AITank extends Tank {
 	public static final int BLUE_TANK = 1;
 	int level = 1;
 	private int type;
+	int playerx;
+	int playery;
+	int tankx;
+	int tanky;
 
 	public AITank(BufferedImage image, int frameHeight, int frameWidth, int type) {
 		super(image, frameHeight, frameWidth);
@@ -33,40 +37,58 @@ public class AITank extends Tank {
 			this.setRunning(false);
 		}
 		else if (getLuck()){
-			int playerx = MainCanvas.tankArray.get(0).getBoundX();
-			int playery = MainCanvas.tankArray.get(0).getBoundY();
-			int tankx = this.getBoundX();
-			int tanky = this.getBoundY();
-			
-			if (tankx - 32 <= playerx && playerx <= tankx + 32){
-				if (tanky <= playery) {
-					this.setCurrentDirection(Sprite.DOWN);
-					this.fire();
+			int playerx = MainCanvas.tankArray.get(0).getX();
+			int playery = MainCanvas.tankArray.get(0).getY();
+			int tankx = this.getX();
+			int tanky = this.getY();
+			if (InVertical() && !InHorizon()){
+				if (tanky + 32 <= playery) {
+					SetDirectionAndFire(Sprite.DOWN);
 				}
-				else if (tanky > playery ){
-					this.setCurrentDirection(Sprite.UP);
-					this.fire();
+				else if (tanky - 32 >= playery ){
+					SetDirectionAndFire(Sprite.UP);
 				}
 			}
-			else if (tanky - 32 <= playery && playery <= tanky + 32){
-				if (tankx <= playerx){
-					this.setCurrentDirection(Sprite.RIGHT);
-					this.fire();
+			else if (InHorizon() && !InVertical()){
+				if (tankx + 32 < playerx){
+					SetDirectionAndFire(Sprite.RIGHT);
 				}
-				else if (tankx > playerx){
-					this.setCurrentDirection(Sprite.LEFT);
-					this.fire();
+				else if (tankx -32 > playerx){
+					SetDirectionAndFire(Sprite.LEFT);
 				}
 			}
-			
+			else if (InHorizon() && InVertical()){
+				if (tankx + 32 > playerx && tankx - 32 < playerx)
+					if (tanky>playery) SetDirectionAndFire(Sprite.UP);
+					else SetDirectionAndFire(Sprite.DOWN);
+				if (tanky + 32 > playery && tanky - 32 < playery)
+					if (tankx>playerx) SetDirectionAndFire(Sprite.LEFT);
+					else SetDirectionAndFire(Sprite.RIGHT);
+			}
+			else RandomAction();
 		}
 		else RandomAction();
+	}
+	
+	public boolean InVertical(){
+		if (tankx - 32 <= playerx && playerx <= tankx + 32) return true;
+		else return false;
+	}
+	
+	public boolean InHorizon(){
+		if (tanky - 32 <= playery && playery <= tanky + 32) return true;
+		else return false;
 	}
 	
 	public boolean getLuck(){
 		rnd = new Random(new Date().getTime());
 		if (level + rnd.nextInt(10) > 5) return true;
 		return false ;
+	}
+	
+	public void SetDirectionAndFire(int dir){
+		this.setCurrentDirection(dir);
+		this.fire();
 	}
 	
 	public void RandomAction(){

@@ -64,7 +64,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		this.frame = frame;
 		try {
 			tm = new TileManager();
-			//ps = new PlaySound();
+			ps = new PlaySound();
 			// init tank, item and explosion array
 			explosionArray = new ArrayList<Explosion>(20);
 			explosionArray.clear();
@@ -98,7 +98,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	public void initLevel(int level) {
 		tm.loadMap(level);
-		//ps.PlayBeginningSound();
+		ps.PlayBeginningSound();
 		this.spawnAITanks();
 	}
 
@@ -187,7 +187,6 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		try {
 			Thread.sleep(1500);
 		} catch (Exception e) {
-
 		}
 		while (true) {
 			animationClock++;
