@@ -21,13 +21,13 @@ public class HelpPanel extends JPanel {
 	
 	public HelpPanel(){
 		setLayout(null);
-		setPreferredSize(new Dimension(600,450));
+		setPreferredSize(new Dimension(1000,575));
 		ImageManager im = new ImageManager("Resources/Image/background_help.png", 600, 450);
 		bg = im.GetImage();
 		Insets i = getInsets();
-		int x = i.left;
+		int x = i.left + 100;
 		int y = i.top;
-		LabelCreater howtoplay = new LabelCreater("<html><b><font size = \"6\" color = \"#FF0000\"><centre> HOW TO PLAY </centre></font></b></html>",300,50,x+230,y+60);
+		LabelCreater howtoplay = new LabelCreater("<html><b><font size = \"6\" color = \"#FF0000\"><centre> HOW TO PLAY </centre></font></b></html>",300,50,x+250,y+60);
 		ButtonCreater back = new ButtonCreater("<html><b><font size = \"3\"> BACK </font></b></html>",150,30,x+390,y+350);
 		add(howtoplay);
 		add(back);
@@ -35,7 +35,7 @@ public class HelpPanel extends JPanel {
 	}
 	
 	public void paintComponent(Graphics g) {
-	    g.drawImage(bg, 0, 0, null);
+	    g.drawImage(bg, 100, 0, null);
 	  }
 	public LinkedList GetListButton(){
 		return listbutton;
