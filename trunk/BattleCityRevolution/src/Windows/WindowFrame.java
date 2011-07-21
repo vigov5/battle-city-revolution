@@ -25,7 +25,7 @@ public class WindowFrame extends JFrame{
 		play = fp.getPlayButton();
 		add(fp, BorderLayout.CENTER);
 		try {
-			createMainCanvas();
+			createMainCanvas();	
 		} catch (Exception e){}
 		play.addActionListener(new ActionListener() {
 			
@@ -34,7 +34,6 @@ public class WindowFrame extends JFrame{
 				// TODO Auto-generated method stub
 				remove(fp);
 				addMaincanvas();
-				maincanvas.setPaused(false);
 				repaint();
 			}
 		});
@@ -49,10 +48,12 @@ public class WindowFrame extends JFrame{
 	protected void createMainCanvas() {
 		// TODO Auto-generated method stub
 		maincanvas = new MainCanvas(this);
+		//maincanvas.setPaused(true);
 	}
 
 	private void addMaincanvas(){
 		add(maincanvas, BorderLayout.CENTER);
+		maincanvas.setPaused(false);
 		maincanvas.setFocusable(true);
 		maincanvas.requestFocusInWindow();
 	}
@@ -63,6 +64,7 @@ public class WindowFrame extends JFrame{
 
 	public void callBackFunction() {
 		// TODO Auto-generated method stub
+		//maincanvas.setPaused(true);
 		this.remove(maincanvas);
 		addFramePanel();
 		setBackground(Color.WHITE);
