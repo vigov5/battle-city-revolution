@@ -15,19 +15,33 @@ public class WindowFrame extends JFrame{
 	
 	FramePanel fp = new FramePanel();
 	MainCanvas maincanvas;
-	JButton play;
+	JButton newgame;
+	JButton resume;
 	Dimension d;
 	
 	public WindowFrame () {
 		super("BATTLE CITY REVOLUTION");
 		setPreferredSize(new Dimension (1000,575));
 		setBackground(Color.WHITE);
-		play = fp.getPlayButton();
+		newgame = fp.getNewGameButton();
+		resume = fp.getResumeButton();
 		add(fp, BorderLayout.CENTER);
 		try {
 			createMainCanvas();	
 		} catch (Exception e){}
-		play.addActionListener(new ActionListener() {
+		
+		resume.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				remove(fp);
+				addMaincanvas();
+				repaint();
+			}
+		});
+		
+		newgame.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -67,7 +81,29 @@ public class WindowFrame extends JFrame{
 		//maincanvas.setPaused(true);
 		this.remove(maincanvas);
 		addFramePanel();
+		EnableResume();
 		setBackground(Color.WHITE);
 		repaint();
+	}
+	
+	public void callBackFunctionWhenGameOver(){
+		this.remove(maincanvas);
+		DisableResume();
+		addFramePanel();
+		setBackground(Color.WHITE);
+		//createMainCanvas();
+		repaint();
+	}
+	
+	public void DisableResume(){
+		resume.setEnabled(false);
+		resume.setText("<html><i><font size = \"3\"> RESUME </font></i></html>");
+		resume.setForeground(Color.GRAY);
+	}
+	
+	public void EnableResume(){
+		resume.setEnabled(true);
+		resume.setText("<html><b><font size = \"3\"> RESUME </font></b></html>");
+		resume.setForeground(Color.BLACK);
 	}
 }
