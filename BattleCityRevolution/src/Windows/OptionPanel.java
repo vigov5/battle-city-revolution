@@ -55,11 +55,11 @@ public class OptionPanel extends JPanel implements ActionListener {
 	public OptionPanel(){
 		
 		setLayout(null);
-		setPreferredSize(new Dimension(600,450));
+		setPreferredSize(new Dimension(1000,575));
 		ImageManager im = new ImageManager("Resources/Image/background_option.png", 600, 450);
 		bg = im.GetImage();
 		Insets i = getInsets();
-		int x = i.left+170;
+		int x = i.left+270;
 		int y = i.top + 20;
 
 		getKey();
@@ -134,7 +134,7 @@ public class OptionPanel extends JPanel implements ActionListener {
 	}
 	
 	public void paintComponent(Graphics g) {
-	    g.drawImage(bg, 0, 0, null);
+	    g.drawImage(bg, 100, 0, null);
 	  }
 	
 	private void getKey(){
