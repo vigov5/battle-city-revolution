@@ -37,7 +37,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public boolean soundstate;
 	public final int SCREEN_WIDTH = 1000;
 	public final int SCREEN_HEIGHT = 544;
-	public int totalAITank = 20;
+	public int totalAITank = 1;
 	public int currentTotalAITank = 0;
 	public final int MAX_AITANK_ONSCREEN = 8;
 	private boolean isRunning;
@@ -120,6 +120,10 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		initLevel(level);
 		tankArray.get(0).setPositionAndBound(10 * 32, 16 * 32);
 		playerTank.setCurrentDirection(Sprite.UP);
+		repaint();
+		try {
+			Thread.sleep(2000);
+		} catch (Exception e) {}
 	}
 
 	public void spawnItem(int x, int y) {
@@ -194,9 +198,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(1500);
-		} catch (Exception e) {
-		}
+			Thread.sleep(2000);
+		} catch (Exception e) {}
 		while (!isEndGame()) {
 			animationClock++;
 			if (animationClock == 2147483647) {
