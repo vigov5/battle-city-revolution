@@ -17,7 +17,6 @@ public class FramePanel extends JPanel implements ActionListener{
 	
 	private MainPanel mainpanel = new MainPanel();
 	private OptionPanel optionpanel = new OptionPanel();
-	private RankingPanel rankingpanel = new RankingPanel();
 	private HelpPanel helppanel = new HelpPanel();
 	private AboutPanel aboutpanel = new AboutPanel();
 	private Insets i = getInsets();
@@ -50,9 +49,6 @@ public class FramePanel extends JPanel implements ActionListener{
 			but.addActionListener(this);
 		}
 		
-		d = rankingpanel.getPreferredSize();
-		rankingpanel.setBounds(i.left+100,i.top+50,d.width,d.height);
-		listbutton = rankingpanel.GetListButton();
 		for (int j = 0;j<listbutton.size();j++){
 			JButton but = (JButton)listbutton.get(j);
 			but.addActionListener(this);
@@ -86,11 +82,6 @@ public class FramePanel extends JPanel implements ActionListener{
 		//optionpanel.setFocusable(true);
 	}
 	
-	public void DisplayRankingPanel(){
-		state = 3;
-		add(rankingpanel);
-	}
-	
 	public void DisplayHelpPanel(){
 		state = 4;
 		add(helppanel);
@@ -114,10 +105,6 @@ public class FramePanel extends JPanel implements ActionListener{
 		if (s.indexOf("QUIT")>-1){
 			System.exit(0);
 		}
-		if (s.indexOf("RANKING")>-1){
-			remove(mainpanel);
-			DisplayRankingPanel();
-		}
 		if (s.indexOf("HELP")>-1){
 			remove(mainpanel);
 			DisplayHelpPanel();
@@ -129,7 +116,6 @@ public class FramePanel extends JPanel implements ActionListener{
 		if (s.indexOf("BACK")>-1){
 			switch (state){
 			case 2 : remove(optionpanel);optionpanel.writeSetting(); break;
-			case 3 : remove(rankingpanel); break;
 			case 4 : remove(helppanel); break;
 			case 5 : remove(aboutpanel); break;
 			}
