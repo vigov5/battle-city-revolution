@@ -22,8 +22,8 @@ public class TileManager {
 	private int totalBrick = 0;
 	private Sprite goldenBird;
 	private BufferedImage background;
-	public int goldenEagleRow;
-	public int goldenEagleCol;
+	public static int goldenEagleRow;
+	public static int goldenEagleCol;
 
 	public TileManager() throws IOException{
 		background = MainCanvas.t.getTileImage().getSubimage(64, 32, 32, 32);
