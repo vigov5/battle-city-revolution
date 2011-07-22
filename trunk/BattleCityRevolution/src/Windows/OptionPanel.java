@@ -176,10 +176,20 @@ public class OptionPanel extends JPanel implements ActionListener {
 		keyup = 38;
 		keyfire = 32;
 		key_left.setText(KeyEvent.getKeyText(keyleft));
+		key_left.setFocusable(false);
+		key_left.setEditable(false);
 		key_right.setText(KeyEvent.getKeyText(keyright));
+		key_right.setFocusable(false);
+		key_right.setEditable(false);
 		key_down.setText(KeyEvent.getKeyText(keydown));
+		key_down.setFocusable(false);
+		key_down.setEditable(false);
 		key_up.setText(KeyEvent.getKeyText(keyup));
+		key_up.setFocusable(false);
+		key_up.setEditable(false);
 		key_fire.setText(KeyEvent.getKeyText(keyfire));	
+		key_fire.setFocusable(false);
+		key_fire.setEditable(false);
 	}
 	
 	private Boolean CheckKey(int keycheck){

@@ -14,7 +14,7 @@ public class AITank extends Tank {
 	private boolean frezzed = false;
 	public static final int RED_TANK = 0;
 	public static final int BLUE_TANK = 1;
-	int level = 1;
+	int level = MainCanvas.currentLevel;
 	private int type;
 	int playerx;
 	int playery;
@@ -26,8 +26,9 @@ public class AITank extends Tank {
 		// TODO Auto-generated constructor stub
 		rnd = new Random(new Date().getTime());
 		this.setCurrentDirection(Sprite.DOWN);
-		this.bulletDelayTime = 300;
-		this.setTotalHealth(100);
+		this.bulletDelayTime = 800 - (level-1) * 50;
+		if (this.bulletDelayTime < 150) this.bulletDelayTime = 150;
+		this.setTotalHealth(100 + (level-1) *20);
 		this.currentHealth = this.totalHealth;
 		this.type = type;
 	}
@@ -82,7 +83,7 @@ public class AITank extends Tank {
 	
 	public boolean getLuck(){
 		rnd = new Random(new Date().getTime());
-		if (level + rnd.nextInt(10) > 5) return true;
+		if (level + rnd.nextInt(10) > 8) return true;
 		return false ;
 	}
 	
