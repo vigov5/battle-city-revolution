@@ -38,11 +38,14 @@ public class AITank extends Tank {
 			this.setRunning(false);
 		}
 		else if (getLuck()){
-			int playerx = MainCanvas.tankArray.get(0).getX();
-			int playery = MainCanvas.tankArray.get(0).getY();
-			int tankx = this.getX();
-			int tanky = this.getY();
-			if (InVertical() && !InHorizon()){
+			playerx = MainCanvas.tankArray.get(0).getX();
+			playery = MainCanvas.tankArray.get(0).getY();
+			tankx = this.getX();
+			tanky = this.getY();
+			if (!InHorizon() && !InVertical()) {
+				RandomAction();
+			}
+			else if (InVertical() && !InHorizon()){
 				if (tanky + 32 <= playery) {
 					SetDirectionAndFire(Sprite.DOWN);
 				}
@@ -66,18 +69,19 @@ public class AITank extends Tank {
 					if (tankx>playerx) SetDirectionAndFire(Sprite.LEFT);
 					else SetDirectionAndFire(Sprite.RIGHT);
 			}
-			else RandomAction();
 		}
 		else RandomAction();
 	}
 	
 	public boolean InVertical(){
-		if (tankx - 32 <= playerx && playerx <= tankx + 32) return true;
+		if ((tankx - 32 < playerx) && (playerx < tankx + 32)) 
+			return true;
 		else return false;
 	}
 	
 	public boolean InHorizon(){
-		if (tanky - 32 <= playery && playery <= tanky + 32) return true;
+		if ((tanky - 32 < playery) && (playery < tanky + 32)) 
+			return true;
 		else return false;
 	}
 	
