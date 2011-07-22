@@ -26,7 +26,7 @@ public class FramePanel extends JPanel implements ActionListener{
 	
 	public FramePanel(){
 		setLayout(null);
-		setPreferredSize(new Dimension(800,600));
+		setPreferredSize(new Dimension(1000,575));
 		setBackground(Color.white);
 		AddPanel();
 		DisplayMainPanel();
