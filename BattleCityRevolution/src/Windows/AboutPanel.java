@@ -26,7 +26,7 @@ public class AboutPanel extends JPanel {
 	String des3 = "グエン・アイン・ティエン";
 	String des4 = "チャン・ドゥック・タン";
 	String des5 = "鈴木梅雨";
-	String des6 = "ひろき";
+	String des6 = "裕樹";
 	
 	public AboutPanel(){
 		setLayout(null);
