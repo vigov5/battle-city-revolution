@@ -37,7 +37,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public boolean soundstate;
 	public final int SCREEN_WIDTH = 1000;
 	public final int SCREEN_HEIGHT = 544;
-	public int totalAITank = 1;
+	public int totalAITank = 100;
 	public int currentTotalAITank = 0;
 	public final int MAX_AITANK_ONSCREEN = 8;
 	private boolean isRunning;
@@ -49,14 +49,6 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	Thread thread;
 	private WindowFrame frame;
 	private boolean endGame;
-
-	public static boolean isGameOver() {
-		return gameOver;
-	}
-
-	public static void setGameOver(boolean gameOver) {
-		MainCanvas.gameOver = gameOver;
-	}
 
 	public MainCanvas(WindowFrame frame) {
 		this.setEndGame(false);
@@ -156,16 +148,17 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 				// TODO Auto-generated method stub
 				if (!isGameOver()) {
 					if (currentTotalAITank != totalAITank) {
-						int last = -1;
 						if (MainCanvas.tankArray.size() - 1 < MAX_AITANK_ONSCREEN) {
 							int pos = -1;
+
 							do {
 								pos = rnd.nextInt(3) * 12;
-								if (isPlaceSpawnable(pos) && pos != last) {
+								System.out.println("Try to place");
+								if (isPlaceSpawnable(pos)) {
 									System.out.println("Placeable ");
-									last = pos;
-								}
+								} else pos = -1;
 							} while (pos == -1);
+
 							currentTotalAITank++;
 							try {
 								AITank tmp;
@@ -222,19 +215,21 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 					}
 
 					// Update tank state
-					for (int i = 0; i < tankArray.size(); i++) {
-						Tank tmp = tankArray.get(i);
-						if (tmp instanceof AITank)
-							((game.AITank) tmp).think();
-						tmp.update();
-						if (tmp instanceof AITank && tmp.isDestroyed) {
-							if (((AITank) tmp).getType() == AITank.RED_TANK) {
-								this.spawnItem(tmp.getX(), tmp.getY());
+						for (int i = 0; i < tankArray.size(); i++) {
+							Tank tmp = tankArray.get(i);
+							if (tmp instanceof AITank){
+								((game.AITank) tmp).think();
 							}
-							tankArray.remove(tmp);
-							tmp = null;
+								
+							tmp.update();
+							if (tmp instanceof AITank && tmp.isDestroyed) {
+								if (((AITank) tmp).getType() == AITank.RED_TANK) {
+									this.spawnItem(tmp.getX(), tmp.getY());
+								}
+								tankArray.remove(tmp);
+								tmp = null;
+							}
 						}
-					}
 
 					// update item
 					for (int i = 0; i < itemArray.size(); i++) {
@@ -443,5 +438,13 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	public void setEndGame(boolean endGame) {
 		this.endGame = endGame;
+	}
+	
+	public static boolean isGameOver() {
+		return gameOver;
+	}
+
+	public static void setGameOver(boolean gameOver) {
+		MainCanvas.gameOver = gameOver;
 	}
 }
