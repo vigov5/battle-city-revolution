@@ -92,8 +92,8 @@ public class Tools {
 		return false; 
 	}
 	
-	public boolean isInBound(Sprite a, int x, int y, int width, int height){
-		if (a.getBoundX() + a.getBoundWidth() < x || a.getBoundX() > x + width || a.getBoundY() + a.getHeight() < y || a.getBoundY() > y + height){
+	public boolean isInBound(Tank a, int x, int y, int width, int height){
+		if (a.getX() >= x + width || a.getX() + a.getWidth() <= x || a.getY() + a.getHeight() <= y || a.getY() >= y + height){
 			return false;
 		}
 		return true;

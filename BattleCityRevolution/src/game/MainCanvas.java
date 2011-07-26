@@ -43,6 +43,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	private boolean isRunning;
 	private static boolean gameOver;
 	private boolean paused = false;
+	private Timer aitankTimer;
 	Random rnd;
 	PlaySound ps;
 	Thread thread;
@@ -83,7 +84,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			tankArray.add(0, playerTank);
 
 			GetSoundOption();
-			initLevel(currentLevel);
+			initMap(rnd.nextInt(16) + 1);
 			MainCanvas.setGameOver(false);
 
 			this.setRunning(false);
@@ -97,8 +98,8 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		}
 	}
 
-	public void initLevel(int level) {
-		tm.loadMap(level);
+	public void initMap(int mapNumber) {
+		tm.loadMap(mapNumber);
 		if (soundstate)
 			ps.PlayBeginningSound();
 		this.spawnAITanks();
@@ -113,11 +114,16 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		tm.cleanAllBricks();
 		itemArray.clear();
 		currentTotalAITank = 0;
+		if (this.aitankTimer != null){
+			this.aitankTimer.cancel();
+			this.aitankTimer.purge();
+			this.aitankTimer = null;
+		}
 	}
 
 	public void changeLevel(int level) {
 		cleanUpMap();
-		initLevel(level);
+		initMap(rnd.nextInt(16) + 1);
 		tankArray.get(0).setPositionAndBound(10 * 32, 16 * 32);
 		playerTank.setCurrentDirection(Sprite.UP);
 		repaint();
@@ -142,7 +148,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 
 	private void spawnAITanks() {
 		// TODO Auto-generated method stub
-		Timer aitankTimer = new Timer();
+		aitankTimer = new Timer();
 		aitankTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -162,7 +168,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 							currentTotalAITank++;
 							try {
 								AITank tmp;
-								if (currentTotalAITank % 1 == 0) {
+								if (currentTotalAITank % 4 == 0) {
 									tmp = new AITank(t.getRedTankImage(), 32,
 											32, AITank.RED_TANK);
 								} else
