@@ -155,7 +155,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 								pos = rnd.nextInt(3) * 12;
 								System.out.println("Try to place");
 								if (isPlaceSpawnable(pos)) {
-									System.out.println("Placeable ");
+									System.out.println("Placeable " + pos);
 								} else pos = -1;
 							} while (pos == -1);
 
