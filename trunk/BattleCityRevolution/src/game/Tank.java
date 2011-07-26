@@ -57,7 +57,7 @@ public class Tank extends Sprite {
 			}
 		}
 		this.drawHealthBar(g);
-		this.drawBound(g);
+		//this.drawBound(g);
 		super.render(g);
 	}
 
