@@ -37,7 +37,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 	public boolean soundstate;
 	public final int SCREEN_WIDTH = 1000;
 	public final int SCREEN_HEIGHT = 544;
-	public int totalAITank = 20;
+	public int totalAITank = 1;
 	public int currentTotalAITank = 0;
 	public final int MAX_AITANK_ONSCREEN = 8;
 	private boolean isRunning;
@@ -110,6 +110,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 			tankArray.get(i).getBulletArray().clear();
 			tankArray.remove(i);
 		}
+		tankArray.get(0).getBulletArray().clear();
 		explosionArray.clear();
 		tm.cleanAllBricks();
 		itemArray.clear();
@@ -433,6 +434,7 @@ public class MainCanvas extends JPanel implements Runnable, KeyListener {
 		MainCanvas.tankArray.clear();
 		playerTank = null;
 		ps = null;
+		currentLevel = 1;
 	}
 
 	public boolean isEndGame() {

@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Explosion extends Sprite {
@@ -15,5 +16,11 @@ public class Explosion extends Sprite {
 		if (this.currentFrame == this.frameStrip.length - 1){
 			this.setDestroyed(true);
 		} else if (MainCanvas.animationClock % 5 == 0) this.nextFrame();
+	}
+	
+	public void render(Graphics g){
+		if (!this.isDestroyed()){
+			super.render(g);
+		}
 	}
 }
